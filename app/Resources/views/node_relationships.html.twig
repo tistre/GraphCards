@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block body_main %}
+
+    <h1>Node {{ node.uuid }} ({{ node.labels|join(', ') }})</h1>
+
+    <div>
+        {% for nodeProperty in node.properties %}
+            {{ nodeProperty.name }}: {{ nodeProperty.value }}<br/>
+        {% endfor %}
+    </div>
+
+    <a rel="editform" href="{{ path('editNode', {'nodeUuid': node.uuid}) }}">Edit</a>
+
+{% endblock %}

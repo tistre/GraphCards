@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+
+{% block body_main %}
+
+    <h1>Relationship {{ relationship.uuid }} ({{ relationship.type }})</h1>
+
+    <div>
+        Source node: <a
+                href="{{ path('viewNode', {'nodeUuid': relationship.sourceNode.uuid}) }}">{{ relationship.sourceNode.uuid }}</a>
+        <br/>
+        Target node: <a
+                href="{{ path('viewNode', {'nodeUuid': relationship.targetNode.uuid}) }}">{{ relationship.targetNode.uuid }}</a>
+    </div>
+
+    <div>
+        Properties: <br/>
+        {% for relationshipProperty in relationship.properties %}
+            {{ relationshipProperty.name }}: {{ relationshipProperty.value }}<br/>
+        {% endfor %}
+    </div>
+
+    <a rel="editform" href="{{ path('editRelationship', {'relationshipUuid': relationship.uuid}) }}">Edit</a>
+
+{% endblock %}

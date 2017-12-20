@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+{% block body %}
+    {% block body_header %}
+        <div>
+            <a href="{{ path('listNodes') }}">List nodes</a>
+            <a href="{{ path('addNode') }}">Add node</a>
+            <a href="{{ path('listRelationships') }}">List relationships</a>
+            <a href="{{ path('addRelationship') }}">Add relationship</a>
+        </div>
+    {% endblock %}
+    {% block body_main %}
+    {% endblock %}
+{% endblock %}
+{% block javascripts %}{% endblock %}
+</body>
+</html>

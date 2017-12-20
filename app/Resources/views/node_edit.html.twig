@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+
+{% block body_main %}
+
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    <div class="form-group">
+        {{ form_label(form.labels) }}
+        {% for labelField in form.labels %}
+            {{ form_errors(labelField) }}
+            {{ form_widget(labelField, {'attr': {'class': 'form-control', 'rows': '20'}}) }}
+        {% endfor %}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.properties) }}
+        {% for propertyField in form.properties %}
+            {{ form_errors(propertyField) }}
+            {{ form_widget(propertyField) }}
+        {% endfor %}
+    </div>
+
+    {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+
+    {{ form_end(form) }}
+
+    <a rel="alternate" href="{{ path('viewNode', {'nodeUuid': nodeUuid}) }}">View</a>
+
+{% endblock %}

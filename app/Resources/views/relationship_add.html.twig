@@ -1,0 +1,38 @@
+{% extends "base.html.twig" %}
+
+{% block body_main %}
+
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    <div class="form-group">
+        {{ form_label(form.type) }}
+        {{ form_errors(form.type) }}
+        {{ form_widget(form.type, {'attr': {'class': 'form-control', 'rows': '20'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.sourceNodeUuid) }}
+        {{ form_errors(form.sourceNodeUuid) }}
+        {{ form_widget(form.sourceNodeUuid, {'attr': {'class': 'form-control', 'rows': '20'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.targetNodeUuid) }}
+        {{ form_errors(form.targetNodeUuid) }}
+        {{ form_widget(form.targetNodeUuid, {'attr': {'class': 'form-control', 'rows': '20'}}) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.properties) }}
+        {% for propertyField in form.properties %}
+            {{ form_errors(propertyField) }}
+            {{ form_widget(propertyField) }}
+        {% endfor %}
+    </div>
+
+    {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+
+    {{ form_end(form) }}
+
+{% endblock %}
