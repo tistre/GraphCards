@@ -4,6 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\DataSource;
 use AppBundle\Form\NodeFormType;
+use AppBundle\Form\NodeSearchFormData;
+use AppBundle\Form\NodeSearchFormType;
 use AppBundle\Service\DbAdapterService;
 use GraphCards\Db\Db;
 use GraphCards\Db\DbAdapter;
@@ -21,6 +23,8 @@ class ApiNodeController extends Controller
 {
     /**
      * @Route("/api/nodes/list", name="listNodes")
+     * @param Request $request
+     * @return Response
      */
     public function listNodesAction(Request $request): Response
     {
@@ -30,8 +34,19 @@ class ApiNodeController extends Controller
 
         $response = new Response();
 
-        $tplVars = [];
-        $tplVars['nodes'] = $dbAdapter->listNodes();
+        $searchFormData = new NodeSearchFormData();
+        $searchForm = $this->createForm(NodeSearchFormType::class, $searchFormData);
+
+        $searchForm->handleRequest($request);
+
+        $searchLabel = '';
+
+        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
+            $searchLabel = $searchFormData->label;
+        }
+
+        $tplVars = ['searchForm' => $searchForm->createView()];
+        $tplVars['nodes'] = $dbAdapter->listNodes($searchLabel);
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 
