@@ -21,6 +21,8 @@ class ApiRelationshipController extends Controller
 {
     /**
      * @Route("/api/relationships/list", name="listRelationships")
+     * @param Request $request
+     * @return Response
      */
     public function listRelationshipsAction(Request $request)
     {
@@ -41,6 +43,8 @@ class ApiRelationshipController extends Controller
 
     /**
      * @Route("/api/relationships/add", name="addRelationship")
+     * @param Request $request
+     * @return Response
      */
     public function addRelationshipAction(Request $request)
     {
@@ -54,6 +58,11 @@ class ApiRelationshipController extends Controller
         $tplVars = [];
 
         $formData = $dataSource->getAddRelationshipFormData();
+
+        // Support ?type=TYPE for pre-filling
+        if ($request->query->has('type')) {
+            $formData->type = $request->query->get('type');
+        }
 
         $form = $this->createForm(RelationshipFormType::class, $formData);
         $form->handleRequest($request);
@@ -82,8 +91,11 @@ class ApiRelationshipController extends Controller
 
     /**
      * @Route("/api/relationship/{relationshipUuid}/edit", name="editRelationship")
+     * @param Request $request
+     * @param string $relationshipUuid
+     * @return Response
      */
-    public function editRelationshipAction(Request $request, $relationshipUuid)
+    public function editRelationshipAction(Request $request, string $relationshipUuid)
     {
         /** @var DbAdapterService $dbAdapterService */
         $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
@@ -123,8 +135,11 @@ class ApiRelationshipController extends Controller
 
     /**
      * @Route("/api/relationship/{relationshipUuid}", name="viewRelationship")
+     * @param Request $request
+     * @param string $relationshipUuid
+     * @return Response
      */
-    public function viewRelationshipAction(Request $request, $relationshipUuid)
+    public function viewRelationshipAction(Request $request, string $relationshipUuid)
     {
         /** @var DbAdapterService $dbAdapterService */
         $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');

@@ -56,6 +56,8 @@ class ApiNodeController extends Controller
 
     /**
      * @Route("/api/nodes/add", name="addNode")
+     * @param Request $request
+     * @return Response
      */
     public function addNodeAction(Request $request): Response
     {
@@ -69,6 +71,11 @@ class ApiNodeController extends Controller
         $tplVars = [];
 
         $formData = $dataSource->getAddNodeFormData();
+
+        // Support ?label=LABEL for pre-filling
+        if ($request->query->has('label')) {
+            array_unshift($formData->labels, $request->query->get('label'));
+        }
 
         $form = $this->createForm(NodeFormType::class, $formData);
         $form->handleRequest($request);
@@ -97,8 +104,11 @@ class ApiNodeController extends Controller
 
     /**
      * @Route("/api/node/{nodeUuid}/edit", name="editNode")
+     * @param Request $request
+     * @param string $nodeUuid
+     * @return Response
      */
-    public function editNodeAction(Request $request, $nodeUuid): Response
+    public function editNodeAction(Request $request, string $nodeUuid): Response
     {
         /** @var DbAdapterService $dbAdapterService */
         $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
@@ -138,8 +148,11 @@ class ApiNodeController extends Controller
 
     /**
      * @Route("/api/node/{nodeUuid}", name="viewNode")
+     * @param Request $request
+     * @param string $nodeUuid
+     * @return Response
      */
-    public function viewNodeAction(Request $request, $nodeUuid): Response
+    public function viewNodeAction(Request $request, string $nodeUuid): Response
     {
         /** @var DbAdapterService $dbAdapterService */
         $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
