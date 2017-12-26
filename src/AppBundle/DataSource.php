@@ -48,6 +48,7 @@ class DataSource
         foreach ($formData->properties as $propertyFormData) {
             $property = (new Property())
                 ->setName($propertyFormData->name)
+                ->setType($propertyFormData->type)
                 ->setValue($propertyFormData->value);
 
             $node->setProperty($property);
@@ -78,6 +79,7 @@ class DataSource
 
             $property = (new Property())
                 ->setName($propertyFormData->name)
+                ->setType($propertyFormData->type)
                 ->setValue($propertyFormData->value);
 
             $node->setProperty($property);
@@ -124,6 +126,7 @@ class DataSource
 
             $propertyFormData = new PropertyFormData();
             $propertyFormData->name = $nodeProperty->getName();
+            $propertyFormData->type = $nodeProperty->getType();
             $propertyFormData->value = $nodeProperty->getValue();
 
             $formData->properties[] = $propertyFormData;
@@ -178,6 +181,7 @@ class DataSource
 
             $propertyFormData = new PropertyFormData();
             $propertyFormData->name = $relationshipProperty->getName();
+            $propertyFormData->type = $relationshipProperty->getType();
             $propertyFormData->value = $relationshipProperty->getValue();
 
             $formData->properties[] = $propertyFormData;
@@ -213,6 +217,7 @@ class DataSource
         foreach ($formData->properties as $propertyFormData) {
             $property = (new Property())
                 ->setName($propertyFormData->name)
+                ->setType($propertyFormData->type)
                 ->setValue($propertyFormData->value);
 
             $relationship->setProperty($property);
@@ -245,6 +250,7 @@ class DataSource
 
             $property = (new Property())
                 ->setName($propertyFormData->name)
+                ->setType($propertyFormData->type)
                 ->setValue($propertyFormData->value);
 
             $relationship->setProperty($property);

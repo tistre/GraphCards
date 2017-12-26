@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -30,6 +31,20 @@ class PropertyFormType extends AbstractType
                 TextType::class,
                 [
                     'required' => false
+                ]
+            )
+            ->add
+            (
+                'type',
+                ChoiceType::class,
+                [
+                    'required' => true,
+                    'choices' => [
+                        'String' => 'string',
+                        'Integer' => 'integer',
+                        'Float' => 'float',
+                        'Boolean' => 'boolean'
+                    ]
                 ]
             )
             ->add
