@@ -82,6 +82,8 @@ class ApiRelationshipController extends Controller
         }
 
         $tplVars['form'] = $form->createView();
+        $tplVars['allRelationshipTypes'] = $dbAdapter->listRelationshipTypes();
+        $tplVars['allPropertyKeys'] = $dbAdapter->listPropertyKeys();
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 
@@ -126,6 +128,8 @@ class ApiRelationshipController extends Controller
         }
 
         $tplVars['form'] = $form->createView();
+        $tplVars['allRelationshipTypes'] = $dbAdapter->listRelationshipTypes();
+        $tplVars['allPropertyKeys'] = $dbAdapter->listPropertyKeys();
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 

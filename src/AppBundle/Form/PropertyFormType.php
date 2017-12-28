@@ -30,7 +30,8 @@ class PropertyFormType extends AbstractType
                 'name',
                 TextType::class,
                 [
-                    'required' => false
+                    'required' => false,
+                    'attr' => ['list' => 'form-property-key-datalist']
                 ]
             )
             ->add

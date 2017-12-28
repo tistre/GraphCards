@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+
+{% block body_main %}
+
+    <h1>List of property keys</h1>
+
+    <ul>
+
+        {% for propertyKey in propertyKeys %}
+
+            <li>
+                {{ propertyKey }}
+            </li>
+
+        {% endfor %}
+
+    </ul>
+
+    <a rel="alternate" href="{{ path('addNode') }}">Add a node</a>
+    <a rel="alternate" href="{{ path('addRelationship') }}">Add a relationship</a>
+
+{% endblock %}

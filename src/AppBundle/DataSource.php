@@ -13,13 +13,13 @@ use GraphCards\Model\Relationship;
 
 class DataSource
 {
-    /** @var DbAdapterService */
+    /** @var DbAdapter */
     protected $dbAdapter;
 
 
     /**
      * DataSource constructor.
-     * @param DbAdapterService $dbAdapter
+     * @param DbAdapter $dbAdapter
      */
     public function __construct(DbAdapter $dbAdapter)
     {

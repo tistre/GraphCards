@@ -30,7 +30,8 @@ class NodeFormType extends AbstractType
                 CollectionType::class,
                 [
                     'entry_type' => TextType::class,
-                    'required' => false
+                    'required' => false,
+                    'entry_options' => ['attr' => ['list' => 'form-node-label-datalist']]
                 ]
             )
             ->add

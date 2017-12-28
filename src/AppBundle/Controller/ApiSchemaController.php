@@ -53,4 +53,26 @@ class ApiSchemaController extends Controller
 
         return $this->render('schema_relationshiptypes_list.html.twig', $tplVars, $response);
     }
+
+
+    /**
+     * @Route("/api/schema/propertyKeys/list", name="listPropertyKeys")
+     * @param Request $request
+     * @return Response
+     */
+    public function listPropertyKeysAction(Request $request): Response
+    {
+        /** @var DbAdapterService $dbAdapterService */
+        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
+        $dbAdapter = $dbAdapterService->getDbAdapter();
+
+        $response = new Response();
+
+        $tplVars = [];
+        $tplVars['propertyKeys'] = $dbAdapter->listPropertyKeys();
+
+        $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
+
+        return $this->render('schema_propertykeys_list.html.twig', $tplVars, $response);
+    }
 }

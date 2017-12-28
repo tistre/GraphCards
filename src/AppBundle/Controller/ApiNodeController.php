@@ -42,7 +42,9 @@ class ApiNodeController extends Controller
         $searchLabel = '';
 
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
-            $searchLabel = $searchFormData->label;
+            if ($searchFormData->label !== null) {
+                $searchLabel = $searchFormData->label;
+            }
         }
 
         $tplVars = ['searchForm' => $searchForm->createView()];
@@ -95,6 +97,8 @@ class ApiNodeController extends Controller
         }
 
         $tplVars['form'] = $form->createView();
+        $tplVars['allNodeLabels'] = $dbAdapter->listNodeLabels();
+        $tplVars['allPropertyKeys'] = $dbAdapter->listPropertyKeys();
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 
@@ -139,6 +143,8 @@ class ApiNodeController extends Controller
         }
 
         $tplVars['form'] = $form->createView();
+        $tplVars['allNodeLabels'] = $dbAdapter->listNodeLabels();
+        $tplVars['allPropertyKeys'] = $dbAdapter->listPropertyKeys();
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 

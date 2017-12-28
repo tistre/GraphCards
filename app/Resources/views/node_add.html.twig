@@ -6,6 +6,11 @@
     {{ form_errors(form) }}
 
     <div class="form-group">
+        <datalist id="form-node-label-datalist">
+            {% for optionValue in allNodeLabels %}
+                <option value="{{ optionValue }}"></option>
+            {% endfor %}
+        </datalist>
         {{ form_label(form.labels) }}
         {% for labelField in form.labels %}
             {{ form_errors(labelField) }}
@@ -14,6 +19,11 @@
     </div>
 
     <div class="form-group">
+        <datalist id="form-property-key-datalist">
+            {% for optionValue in allPropertyKeys %}
+                <option value="{{ optionValue }}"></option>
+            {% endfor %}
+        </datalist>
         {{ form_label(form.properties) }}
         {% for propertyField in form.properties %}
             {{ form_errors(propertyField) }}

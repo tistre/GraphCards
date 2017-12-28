@@ -45,7 +45,8 @@ class RelationshipFormType extends AbstractType
                 'type',
                 TextType::class,
                 [
-                    'required' => true
+                    'required' => true,
+                    'attr' => ['list' => 'form-relationship-type-datalist']
                 ]
             )
             ->add

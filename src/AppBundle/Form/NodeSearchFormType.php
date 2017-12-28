@@ -2,8 +2,9 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Service\DbAdapterService;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\SearchType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -11,6 +12,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class NodeSearchFormType extends AbstractType
 {
+    /** @var DbAdapterService */
+    protected $dbAdapterService;
+
+
+    public function __construct(DbAdapterService $dbAdapterService)
+    {
+        $this->dbAdapterService = $dbAdapterService;
+    }
+
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
@@ -28,10 +39,11 @@ class NodeSearchFormType extends AbstractType
             ->add
             (
                 'label',
-                SearchType::class,
+                ChoiceType::class,
                 [
                     'label' => 'Label',
-                    'required' => false
+                    'required' => false,
+                    'choices' => $this->getNodeLabelChoices()
                 ]
             )
             ->add
@@ -42,5 +54,20 @@ class NodeSearchFormType extends AbstractType
                     'label' => 'Search'
                 ]
             );
+    }
+
+
+    /**
+     * @return string[]
+     */
+    protected function getNodeLabelChoices(): array
+    {
+        $result = [];
+
+        foreach ($this->dbAdapterService->getDbAdapter()->listNodeLabels() as $nodeLabel) {
+            $result[$nodeLabel] = $nodeLabel;
+        }
+
+        return $result;
     }
 }
