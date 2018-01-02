@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Form\NodeSearchFormData;
 use AppBundle\Form\NodeSearchFormType;
 use AppBundle\Service\DbAdapterService;
+use AppBundle\ViewModel\NodeViewModel;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,8 +40,12 @@ class DefaultController extends Controller
 
         $tplVars = ['searchForm' => $searchForm->createView()];
 
+        $tplVars['nodes'] = [];
+
         // TODO: Add support for $skip, $limit
-        $tplVars['nodes'] = $dbAdapter->listNodes($searchLabel);
+        foreach ($dbAdapter->listNodes($searchLabel) as $node) {
+            $tplVars['nodes'][] = new NodeViewModel($node);
+        }
 
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', $tplVars);

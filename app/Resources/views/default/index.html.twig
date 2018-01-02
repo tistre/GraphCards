@@ -9,12 +9,17 @@
         {% for node in nodes %}
 
             <div class="card" style="width: 18rem;">
+                {% if node.hasProperty('schema:image') %}
+                    <img class="card-img-top" src="{{ node.getProperty('schema:image').value }}"/>
+                {% endif %}
                 <div class="card-body">
-                    <h5 class="card-title">{{ node.uuid }}</h5>
-                    <p class="card-text">{{ node.labels|join(', ') }}</p>
-                    {% for nodeProperty in node.properties %}
-                        <p class="card-text">{{ nodeProperty.name }}: {{ nodeProperty.value }}</p>
-                    {% endfor %}
+                    <h5 class="card-title">
+                        {{ node.getProperty('schema:name').value }}
+                        <small class="text-muted">{{ node.labels|join(', ') }}</small>
+                    </h5>
+                    {% if node.hasProperty('schema:description') %}
+                        <p class="card-text">{{ node.getProperty('schema:description').value }}</p>
+                    {% endif %}
                 </div>
                 <div class="card-body">
                     <a href="{{ path('apiViewNode', {'nodeUuid': node.uuid}) }}" class="card-link">Details</a>
