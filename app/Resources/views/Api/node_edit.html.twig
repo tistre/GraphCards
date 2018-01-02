@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{% extends "Api/base.html.twig" %}
 
 {% block body_main %}
 
@@ -34,5 +34,7 @@
     {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
 
     {{ form_end(form) }}
+
+    <a rel="alternate" href="{{ path('apiViewNode', {'nodeUuid': nodeUuid}) }}">View</a>
 
 {% endblock %}

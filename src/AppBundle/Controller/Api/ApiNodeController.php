@@ -1,17 +1,12 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Api;
 
 use AppBundle\DataSource;
 use AppBundle\Form\NodeFormType;
 use AppBundle\Form\NodeSearchFormData;
 use AppBundle\Form\NodeSearchFormType;
 use AppBundle\Service\DbAdapterService;
-use GraphCards\Db\Db;
-use GraphCards\Db\DbAdapter;
-use GraphCards\Db\DbConfig;
-use Monolog\Handler\SyslogHandler;
-use Monolog\Logger;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -22,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ApiNodeController extends Controller
 {
     /**
-     * @Route("/api/nodes/list", name="listNodes")
+     * @Route("/api/nodes/list", name="apiListNodes")
      * @param Request $request
      * @return Response
      */
@@ -48,16 +43,18 @@ class ApiNodeController extends Controller
         }
 
         $tplVars = ['searchForm' => $searchForm->createView()];
+
+        // TODO: Add support for $skip, $limit
         $tplVars['nodes'] = $dbAdapter->listNodes($searchLabel);
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 
-        return $this->render('nodes_list.html.twig', $tplVars, $response);
+        return $this->render('Api/nodes_list.html.twig', $tplVars, $response);
     }
 
 
     /**
-     * @Route("/api/nodes/add", name="addNode")
+     * @Route("/api/nodes/add", name="apiAddNode")
      * @param Request $request
      * @return Response
      */
@@ -88,7 +85,7 @@ class ApiNodeController extends Controller
 
                 return $this->redirectToRoute
                 (
-                    'viewNode',
+                    'apiViewNode',
                     ['nodeUuid' => $node->getUuid()]
                 );
             } catch (\Exception $exception) {
@@ -102,12 +99,12 @@ class ApiNodeController extends Controller
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 
-        return $this->render('node_add.html.twig', $tplVars, $response);
+        return $this->render('Api/node_add.html.twig', $tplVars, $response);
     }
 
 
     /**
-     * @Route("/api/node/{nodeUuid}/edit", name="editNode")
+     * @Route("/api/node/{nodeUuid}/edit", name="apiEditNode")
      * @param Request $request
      * @param string $nodeUuid
      * @return Response
@@ -134,7 +131,7 @@ class ApiNodeController extends Controller
 
                 return $this->redirectToRoute
                 (
-                    'viewNode',
+                    'apiViewNode',
                     ['nodeUuid' => $node->getUuid()]
                 );
             } catch (\Exception $exception) {
@@ -148,12 +145,12 @@ class ApiNodeController extends Controller
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 
-        return $this->render('node_edit.html.twig', $tplVars, $response);
+        return $this->render('Api/node_edit.html.twig', $tplVars, $response);
     }
 
 
     /**
-     * @Route("/api/node/{nodeUuid}", name="viewNode")
+     * @Route("/api/node/{nodeUuid}", name="apiViewNode")
      * @param Request $request
      * @param string $nodeUuid
      * @return Response
@@ -172,6 +169,6 @@ class ApiNodeController extends Controller
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 
-        return $this->render('node_view.html.twig', $tplVars, $response);
+        return $this->render('Api/node_view.html.twig', $tplVars, $response);
     }
 }

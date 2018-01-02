@@ -1,15 +1,10 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Api;
 
 use AppBundle\DataSource;
 use AppBundle\Form\RelationshipFormType;
 use AppBundle\Service\DbAdapterService;
-use GraphCards\Db\Db;
-use GraphCards\Db\DbAdapter;
-use GraphCards\Db\DbConfig;
-use Monolog\Handler\SyslogHandler;
-use Monolog\Logger;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -20,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ApiRelationshipController extends Controller
 {
     /**
-     * @Route("/api/relationships/list", name="listRelationships")
+     * @Route("/api/relationships/list", name="apiListRelationships")
      * @param Request $request
      * @return Response
      */
@@ -37,12 +32,12 @@ class ApiRelationshipController extends Controller
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 
-        return $this->render('relationships_list.html.twig', $tplVars, $response);
+        return $this->render('Api/relationships_list.html.twig', $tplVars, $response);
     }
 
 
     /**
-     * @Route("/api/relationships/add", name="addRelationship")
+     * @Route("/api/relationships/add", name="apiAddRelationship")
      * @param Request $request
      * @return Response
      */
@@ -73,7 +68,7 @@ class ApiRelationshipController extends Controller
 
                 return $this->redirectToRoute
                 (
-                    'editRelationship',
+                    'apiViewRelationship',
                     ['relationshipUuid' => $relationship->getUuid()]
                 );
             } catch (\Exception $exception) {
@@ -87,12 +82,12 @@ class ApiRelationshipController extends Controller
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 
-        return $this->render('relationship_add.html.twig', $tplVars, $response);
+        return $this->render('Api/relationship_add.html.twig', $tplVars, $response);
     }
 
 
     /**
-     * @Route("/api/relationship/{relationshipUuid}/edit", name="editRelationship")
+     * @Route("/api/relationship/{relationshipUuid}/edit", name="apiEditRelationship")
      * @param Request $request
      * @param string $relationshipUuid
      * @return Response
@@ -119,7 +114,7 @@ class ApiRelationshipController extends Controller
 
                 return $this->redirectToRoute
                 (
-                    'viewRelationship',
+                    'apiViewRelationship',
                     ['relationshipUuid' => $relationship->getUuid()]
                 );
             } catch (\Exception $exception) {
@@ -133,12 +128,12 @@ class ApiRelationshipController extends Controller
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 
-        return $this->render('relationship_edit.html.twig', $tplVars, $response);
+        return $this->render('Api/relationship_edit.html.twig', $tplVars, $response);
     }
 
 
     /**
-     * @Route("/api/relationship/{relationshipUuid}", name="viewRelationship")
+     * @Route("/api/relationship/{relationshipUuid}", name="apiViewRelationship")
      * @param Request $request
      * @param string $relationshipUuid
      * @return Response
@@ -156,6 +151,6 @@ class ApiRelationshipController extends Controller
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 
-        return $this->render('relationship_view.html.twig', $tplVars, $response);
+        return $this->render('Api/relationship_view.html.twig', $tplVars, $response);
     }
 }

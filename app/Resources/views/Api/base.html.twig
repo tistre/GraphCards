@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}Welcome!{% endblock %} – GraphCards API</title>
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+{% block body %}
+    {% block body_header %}
+        <div>
+            <a href="{{ path('apiListNodes') }}">List nodes</a>
+            <a href="{{ path('apiAddNode') }}">Add node</a>
+            <a href="{{ path('apiListRelationships') }}">List relationships</a>
+            <a href="{{ path('apiAddRelationship') }}">Add relationship</a>
+            <a href="{{ path('apiListNodeLabels') }}">List node labels</a>
+            <a href="{{ path('apiListRelationshipTypes') }}">List relationship types</a>
+            <a href="{{ path('apiListPropertyKeys') }}">List property keys</a>
+        </div>
+    {% endblock %}
+    {% block body_main %}
+    {% endblock %}
+{% endblock %}
+{% block javascripts %}{% endblock %}
+</body>
+</html>

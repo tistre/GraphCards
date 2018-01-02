@@ -1,0 +1,27 @@
+{% extends "Api/base.html.twig" %}
+
+{% block body_main %}
+
+    <h1>List of relationships</h1>
+
+    <ul>
+
+        {% for relationship in relationships %}
+
+            <li>
+                <a href="{{ path('apiViewRelationship', {'relationshipUuid': relationship.uuid}) }}">{{ relationship.uuid }} [{{ relationship.type }}]</a><br />
+                Source node: <a href="{{ path('apiViewNode', {'nodeUuid': relationship.sourceNode.uuid}) }}">{{ relationship.sourceNode.uuid }}</a><br />
+                Target node: <a href="{{ path('apiViewNode', {'nodeUuid': relationship.targetNode.uuid}) }}">{{ relationship.targetNode.uuid }}</a><br/>
+                {% for relationshipProperty in relationship.properties %}
+                    {{ relationshipProperty.name }}: {{ relationshipProperty.value }}<br />
+                {% endfor %}
+                <a rel="editform" href="{{ path('apiEditRelationship', {'relationshipUuid': relationship.uuid}) }}">Edit</a>
+            </li>
+
+        {% endfor %}
+
+    </ul>
+
+    <a rel="alternate" href="{{ path('apiAddRelationship') }}">Add a relationship</a>
+
+{% endblock %}

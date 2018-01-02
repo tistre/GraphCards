@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Api;
 
 use AppBundle\Service\DbAdapterService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ApiSchemaController extends Controller
 {
     /**
-     * @Route("/api/schema/nodeLabels/list", name="listNodeLabels")
+     * @Route("/api/schema/nodeLabels/list", name="apiListNodeLabels")
      * @param Request $request
      * @return Response
      */
@@ -29,12 +29,12 @@ class ApiSchemaController extends Controller
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 
-        return $this->render('schema_nodelabels_list.html.twig', $tplVars, $response);
+        return $this->render('Api/schema_nodelabels_list.html.twig', $tplVars, $response);
     }
 
 
     /**
-     * @Route("/api/schema/relationshipTypes/list", name="listRelationshipTypes")
+     * @Route("/api/schema/relationshipTypes/list", name="apiListRelationshipTypes")
      * @param Request $request
      * @return Response
      */
@@ -51,12 +51,12 @@ class ApiSchemaController extends Controller
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 
-        return $this->render('schema_relationshiptypes_list.html.twig', $tplVars, $response);
+        return $this->render('Api/schema_relationshiptypes_list.html.twig', $tplVars, $response);
     }
 
 
     /**
-     * @Route("/api/schema/propertyKeys/list", name="listPropertyKeys")
+     * @Route("/api/schema/propertyKeys/list", name="apiListPropertyKeys")
      * @param Request $request
      * @return Response
      */
@@ -73,6 +73,6 @@ class ApiSchemaController extends Controller
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 
-        return $this->render('schema_propertykeys_list.html.twig', $tplVars, $response);
+        return $this->render('Api/schema_propertykeys_list.html.twig', $tplVars, $response);
     }
 }

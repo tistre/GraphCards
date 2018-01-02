@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{% extends "Api/base.html.twig" %}
 
 {% block body_main %}
 
@@ -10,6 +10,6 @@
         {% endfor %}
     </div>
 
-    <a rel="editform" href="{{ path('editNode', {'nodeUuid': node.uuid}) }}">Edit</a>
+    <a rel="editform" href="{{ path('apiEditNode', {'nodeUuid': node.uuid}) }}">Edit</a>
 
 {% endblock %}

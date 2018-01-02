@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{% extends "Api/base.html.twig" %}
 
 {% block body_main %}
 
@@ -6,26 +6,16 @@
     {{ form_errors(form) }}
 
     <div class="form-group">
-        <datalist id="form-relationship-type-datalist">
-            {% for optionValue in allRelationshipTypes %}
+        <datalist id="form-node-label-datalist">
+            {% for optionValue in allNodeLabels %}
                 <option value="{{ optionValue }}"></option>
             {% endfor %}
         </datalist>
-        {{ form_label(form.type) }}
-        {{ form_errors(form.type) }}
-        {{ form_widget(form.type, {'attr': {'class': 'form-control', 'rows': '20'}}) }}
-    </div>
-
-    <div class="form-group">
-        {{ form_label(form.sourceNodeUuid) }}
-        {{ form_errors(form.sourceNodeUuid) }}
-        {{ form_widget(form.sourceNodeUuid, {'attr': {'class': 'form-control', 'rows': '20'}}) }}
-    </div>
-
-    <div class="form-group">
-        {{ form_label(form.targetNodeUuid) }}
-        {{ form_errors(form.targetNodeUuid) }}
-        {{ form_widget(form.targetNodeUuid, {'attr': {'class': 'form-control', 'rows': '20'}}) }}
+        {{ form_label(form.labels) }}
+        {% for labelField in form.labels %}
+            {{ form_errors(labelField) }}
+            {{ form_widget(labelField, {'attr': {'class': 'form-control', 'rows': '20'}}) }}
+        {% endfor %}
     </div>
 
     <div class="form-group">

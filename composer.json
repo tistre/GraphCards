@@ -27,7 +27,7 @@
     ],
     "require": {
         "php": ">=7.1.0",
-        "tistre/graphcards-lib": "dev-master",
+        "components/jquery": "^3.2",
         "graphaware/neo4j-php-client": "^4.8",
         "incenteev/composer-parameter-handler": "^2.0",
         "sensio/distribution-bundle": "^5.0.19",
@@ -35,6 +35,8 @@
         "symfony/monolog-bundle": "^3.1.0",
         "symfony/polyfill-apcu": "^1.0",
         "symfony/symfony": "3.3.*",
+        "tistre/graphcards-lib": "dev-master",
+        "twbs/bootstrap": "4.0.0-beta.3",
         "twig/twig": "^1.0||^2.0"
     },
     "require-dev": {

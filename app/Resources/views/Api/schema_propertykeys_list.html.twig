@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{% extends "Api/base.html.twig" %}
 
 {% block body_main %}
 
@@ -16,7 +16,7 @@
 
     </ul>
 
-    <a rel="alternate" href="{{ path('addNode') }}">Add a node</a>
-    <a rel="alternate" href="{{ path('addRelationship') }}">Add a relationship</a>
+    <a rel="alternate" href="{{ path('apiAddNode') }}">Add a node</a>
+    <a rel="alternate" href="{{ path('apiAddRelationship') }}">Add a relationship</a>
 
 {% endblock %}

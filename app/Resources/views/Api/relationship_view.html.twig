@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{% extends "Api/base.html.twig" %}
 
 {% block body_main %}
 
@@ -6,10 +6,10 @@
 
     <div>
         Source node: <a
-                href="{{ path('viewNode', {'nodeUuid': relationship.sourceNode.uuid}) }}">{{ relationship.sourceNode.uuid }}</a>
+                href="{{ path('apiViewNode', {'nodeUuid': relationship.sourceNode.uuid}) }}">{{ relationship.sourceNode.uuid }}</a>
         <br/>
         Target node: <a
-                href="{{ path('viewNode', {'nodeUuid': relationship.targetNode.uuid}) }}">{{ relationship.targetNode.uuid }}</a>
+                href="{{ path('apiViewNode', {'nodeUuid': relationship.targetNode.uuid}) }}">{{ relationship.targetNode.uuid }}</a>
     </div>
 
     <div>
@@ -19,6 +19,6 @@
         {% endfor %}
     </div>
 
-    <a rel="editform" href="{{ path('editRelationship', {'relationshipUuid': relationship.uuid}) }}">Edit</a>
+    <a rel="editform" href="{{ path('apiEditRelationship', {'relationshipUuid': relationship.uuid}) }}">Edit</a>
 
 {% endblock %}
