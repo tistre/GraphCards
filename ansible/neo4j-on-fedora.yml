@@ -44,7 +44,7 @@
       gpgcheck: yes
   - name: "Install Neo4j"
     dnf:
-      name: neo4j-3.3.0
+      name: neo4j-3.3.1
       state: present
   - name: "Add GraphAware Framework Neo4j plugin"
     get_url:
