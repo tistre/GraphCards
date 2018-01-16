@@ -1,0 +1,29 @@
+{% extends 'default/base.html.twig' %}
+
+{% block body_main %}
+    <div class="container">
+        <div class="card">
+            {% if node.hasProperty('schema:image') %}
+                <img class="card-img-top" src="{{ node.getProperty('schema:image').value }}"/>
+            {% endif %}
+            <div class="card-body">
+                <h1 class="card-title">
+                    {{ node.getProperty('schema:name').value }}
+                    <small class="text-muted">{{ node.labels|join(', ') }}</small>
+                </h1>
+                {% if node.hasProperty('schema:description') %}
+                    <p class="card-text">{{ node.getProperty('schema:description').value }}</p>
+                {% endif %}
+                {% for nodeProperty in node.properties %}
+                    <p class="card-text">
+                        <span class="text-muted">{{ nodeProperty.name }}:</span>
+                        {{ nodeProperty.value }}
+                    </p>
+                {% endfor %}
+            </div>
+            <div class="card-body">
+                <a href="{{ path('editNode', {'nodeUuid': node.uuid}) }}" class="card-link">Edit</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

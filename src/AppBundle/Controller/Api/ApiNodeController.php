@@ -45,7 +45,7 @@ class ApiNodeController extends Controller
         $tplVars = ['searchForm' => $searchForm->createView()];
 
         // TODO: Add support for $skip, $limit
-        $tplVars['nodes'] = $dbAdapter->listNodes($searchLabel);
+        $tplVars['nodes'] = $dbAdapter->listNodes($dbAdapter->buildNodeQuery($searchLabel));
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 

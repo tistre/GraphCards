@@ -3,14 +3,9 @@
 namespace AppBundle\Command;
 
 use AppBundle\Service\DbAdapterService;
-use GraphCards\Db\Db;
-use GraphCards\Db\DbAdapter;
-use GraphCards\Db\DbConfig;
 use GraphCards\Model\Node;
 use GraphCards\Model\Relationship;
 use GraphCards\Utils\XmlReader;
-use Monolog\Handler\SyslogHandler;
-use Monolog\Logger;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -45,8 +40,7 @@ class ImportGraphXmlCommand extends Command
     {
         $dbAdapter = $this->dbAdapterService->getDbAdapter();
 
-        $output->writeln('hello world, this is Graph XML import');
-        $output->writeln('importing from ' . $input->getArgument('input'));
+        $output->writeln('Importing Graph XML from ' . $input->getArgument('input'));
 
         $objects = new XmlReader($input->getArgument('input'));
 

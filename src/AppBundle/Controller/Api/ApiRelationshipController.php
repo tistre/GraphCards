@@ -28,7 +28,7 @@ class ApiRelationshipController extends Controller
         $response = new Response();
 
         $tplVars = [];
-        $tplVars['relationships'] = $dbAdapter->listRelationships(20);
+        $tplVars['relationships'] = $dbAdapter->listRelationships($dbAdapter->buildRelationshipQuery(20));
 
         $response->headers->set('Content-Type', 'application/xhtml+xml; charset=UTF-8');
 

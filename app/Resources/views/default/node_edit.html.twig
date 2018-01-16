@@ -1,0 +1,58 @@
+{% extends 'default/base.html.twig' %}
+
+{% block body_main %}
+    <div class="container">
+        <div class="card">
+
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            {% if node.hasProperty('schema:image') %}
+                <img class="card-img-top" src="{{ node.getProperty('schema:image').value }}"/>
+            {% endif %}
+            <div class="card-body">
+                <h1 class="card-title">
+                    {{ node.getProperty('schema:name').value }}
+                    <small class="text-muted">{{ node.labels|join(', ') }}</small>
+                </h1>
+            </div>
+            <div class="card-body">
+
+                <div class="form-group">
+                    <datalist id="form-node-label-datalist">
+                        {% for optionValue in allNodeLabels %}
+                            <option value="{{ optionValue }}"></option>
+                        {% endfor %}
+                    </datalist>
+                    {{ form_label(form.labels) }}
+                    {% for labelField in form.labels %}
+                        {{ form_errors(labelField) }}
+                        {{ form_widget(labelField, {'attr': {'class': 'form-control', 'rows': '20'}}) }}
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <datalist id="form-property-key-datalist">
+                        {% for optionValue in allPropertyKeys %}
+                            <option value="{{ optionValue }}"></option>
+                        {% endfor %}
+                    </datalist>
+                    {{ form_label(form.properties) }}
+                    {% for propertyField in form.properties %}
+                        {{ form_errors(propertyField) }}
+                        {{ form_widget(propertyField) }}
+                    {% endfor %}
+                </div>
+
+            </div>
+            <div class="card-body">
+                <a href="{{ path('viewNode', {'nodeUuid': node.uuid}) }}" class="card-link">View</a>
+                {{ form_widget(form.save, {'attr': {'class': 'card-link btn btn-primary'}}) }}
+            </div>
+
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+{% endblock %}
