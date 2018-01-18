@@ -13,7 +13,9 @@
                 Source node: <a href="{{ path('apiViewNode', {'nodeUuid': relationship.sourceNode.uuid}) }}">{{ relationship.sourceNode.uuid }}</a><br />
                 Target node: <a href="{{ path('apiViewNode', {'nodeUuid': relationship.targetNode.uuid}) }}">{{ relationship.targetNode.uuid }}</a><br/>
                 {% for relationshipProperty in relationship.properties %}
-                    {{ relationshipProperty.name }}: {{ relationshipProperty.value }}<br />
+                    {% for propertyValue in relationshipProperty.values %}
+                        {{ relationshipProperty.name }}: {{ propertyValue.value }}<br />
+                    {% endfor %}
                 {% endfor %}
                 <a rel="editform" href="{{ path('apiEditRelationship', {'relationshipUuid': relationship.uuid}) }}">Edit</a>
             </li>

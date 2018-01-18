@@ -15,7 +15,9 @@
     <div>
         Properties: <br/>
         {% for relationshipProperty in relationship.properties %}
-            {{ relationshipProperty.name }}: {{ relationshipProperty.value }}<br/>
+            {% for propertyValue in relationshipProperty.values %}
+                {{ relationshipProperty.name }}: {{ propertyValue.value }}<br/>
+            {% endfor %}
         {% endfor %}
     </div>
 

@@ -12,13 +12,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
-class PropertyFormType extends AbstractType
+class PropertyValueFormType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
             [
-                'data_class' => PropertyFormData::class
+                'data_class' => PropertyValueFormData::class
             ]);
     }
 
@@ -28,19 +28,23 @@ class PropertyFormType extends AbstractType
         $builder
             ->add
             (
-                'name',
-                TextType::class,
+                'type',
+                ChoiceType::class,
                 [
-                    'required' => false,
-                    'attr' => ['list' => 'form-property-key-datalist']
+                    'required' => true,
+                    'choices' => [
+                        'String' => 'string',
+                        'Integer' => 'integer',
+                        'Float' => 'float',
+                        'Boolean' => 'boolean'
+                    ]
                 ]
             )
             ->add
             (
-                'values',
-                CollectionType::class,
+                'value',
+                TextareaType::class,
                 [
-                    'entry_type' => PropertyValueFormType::class,
                     'required' => false
                 ]
             );

@@ -4,10 +4,12 @@ namespace AppBundle;
 
 use AppBundle\Form\NodeFormData;
 use AppBundle\Form\PropertyFormData;
+use AppBundle\Form\PropertyValueFormData;
 use AppBundle\Form\RelationshipFormData;
 use GraphCards\Db\DbAdapter;
 use GraphCards\Model\Node;
 use GraphCards\Model\Property;
+use GraphCards\Model\PropertyValue;
 use GraphCards\Model\Relationship;
 
 
@@ -40,16 +42,22 @@ class DataSource
         if (strlen($formData->uuid) > 0) {
             $property = (new Property())
                 ->setName('uuid')
-                ->setValue($formData->uuid);
+                ->addValue((new PropertyValue())->setValue($formData->uuid));
 
             $node->setProperty($property);
         }
 
         foreach ($formData->properties as $propertyFormData) {
             $property = (new Property())
-                ->setName($propertyFormData->name)
-                ->setType($propertyFormData->type)
-                ->setValue($propertyFormData->value);
+                ->setName($propertyFormData->name);
+
+            foreach ($propertyFormData->values as $propertyValueFormData) {
+                $propertyValue = (new PropertyValue())
+                    ->setType($propertyValueFormData->type)
+                    ->setValue($propertyValueFormData->value);
+
+                $property->addValue($propertyValue);
+            }
 
             $node->setProperty($property);
         }
@@ -78,9 +86,15 @@ class DataSource
             }
 
             $property = (new Property())
-                ->setName($propertyFormData->name)
-                ->setType($propertyFormData->type)
-                ->setValue($propertyFormData->value);
+                ->setName($propertyFormData->name);
+
+            foreach ($propertyFormData->values as $propertyValueFormData) {
+                $propertyValue = (new PropertyValue())
+                    ->setType($propertyValueFormData->type)
+                    ->setValue($propertyValueFormData->value);
+
+                $property->addValue($propertyValue);
+            }
 
             $node->setProperty($property);
         }
@@ -98,7 +112,10 @@ class DataSource
 
         $formData->labels = [''];
         $formData->properties = [];
-        $formData->properties[] = new PropertyFormData();
+
+        $propertyFormData = new PropertyFormData();
+        $propertyFormData->values = [new PropertyValueFormData()];
+        $formData->properties[] = $propertyFormData;
 
         return $formData;
     }
@@ -126,15 +143,28 @@ class DataSource
 
             $propertyFormData = new PropertyFormData();
             $propertyFormData->name = $nodeProperty->getName();
-            $propertyFormData->type = $nodeProperty->getType();
-            $propertyFormData->value = $nodeProperty->getValue();
+            $propertyFormData->values = [];
+
+            foreach ($nodeProperty->getValues() as $propertyValue) {
+                $propertyValueFormData = new PropertyValueFormData();
+                $propertyValueFormData->type = $propertyValue->getType();
+                $propertyValueFormData->value = $propertyValue->getValue();
+
+                $propertyFormData->values[] = $propertyValueFormData;
+            }
+
+            // Allow adding data
+            $propertyFormData->values[] = new PropertyValueFormData();
 
             $formData->properties[] = $propertyFormData;
         }
 
         // Allow adding data
         $formData->labels[] = '';
-        $formData->properties[] = new PropertyFormData();
+
+        $propertyFormData = new PropertyFormData();
+        $propertyFormData->values = [new PropertyValueFormData()];
+        $formData->properties[] = $propertyFormData;
 
         return $formData;
     }
@@ -151,7 +181,10 @@ class DataSource
         $formData->targetNodeUuid = '';
         $formData->type = '';
         $formData->properties = [];
-        $formData->properties[] = new PropertyFormData();
+
+        $propertyFormData = new PropertyFormData();
+        $propertyFormData->values = [new PropertyValueFormData()];
+        $formData->properties[] = $propertyFormData;
 
         return $formData;
     }
@@ -181,14 +214,26 @@ class DataSource
 
             $propertyFormData = new PropertyFormData();
             $propertyFormData->name = $relationshipProperty->getName();
-            $propertyFormData->type = $relationshipProperty->getType();
-            $propertyFormData->value = $relationshipProperty->getValue();
+            $propertyFormData->values = [];
+
+            foreach ($relationshipProperty->getValues() as $propertyValue) {
+                $propertyValueFormData = new PropertyValueFormData();
+                $propertyValueFormData->type = $propertyValue->getType();
+                $propertyValueFormData->value = $propertyValue->getValue();
+
+                $propertyFormData->values[] = $propertyValueFormData;
+            }
+
+            // Allow adding data
+            $propertyFormData->values[] = new PropertyValueFormData();
 
             $formData->properties[] = $propertyFormData;
         }
 
         // Allow adding data
-        $formData->properties[] = new PropertyFormData();
+        $propertyFormData = new PropertyFormData();
+        $propertyFormData->values = [new PropertyValueFormData()];
+        $formData->properties[] = $propertyFormData;
 
         return $formData;
     }
@@ -209,16 +254,22 @@ class DataSource
         if (strlen($formData->uuid) > 0) {
             $property = (new Property())
                 ->setName('uuid')
-                ->setValue($formData->uuid);
+                ->addValue((new PropertyValue())->setValue($formData->uuid));
 
             $relationship->setProperty($property);
         }
 
         foreach ($formData->properties as $propertyFormData) {
             $property = (new Property())
-                ->setName($propertyFormData->name)
-                ->setType($propertyFormData->type)
-                ->setValue($propertyFormData->value);
+                ->setName($propertyFormData->name);
+
+            foreach ($propertyFormData->values as $propertyValueFormData) {
+                $propertyValue = (new PropertyValue())
+                    ->setType($propertyValueFormData->type)
+                    ->setValue($propertyValueFormData->value);
+
+                $property->addValue($propertyValue);
+            }
 
             $relationship->setProperty($property);
         }
@@ -249,9 +300,15 @@ class DataSource
             }
 
             $property = (new Property())
-                ->setName($propertyFormData->name)
-                ->setType($propertyFormData->type)
-                ->setValue($propertyFormData->value);
+                ->setName($propertyFormData->name);
+
+            foreach ($propertyFormData->values as $propertyValueFormData) {
+                $propertyValue = (new PropertyValue())
+                    ->setType($propertyValueFormData->type)
+                    ->setValue($propertyValueFormData->value);
+
+                $property->addValue($propertyValue);
+            }
 
             $relationship->setProperty($property);
         }

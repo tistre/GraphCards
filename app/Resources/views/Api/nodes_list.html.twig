@@ -13,7 +13,9 @@
             <li>
                 <a href="{{ path('apiViewNode', {'nodeUuid': node.uuid}) }}">{{ node.uuid }} [{{ node.labels|join(', ') }}]</a><br />
                 {% for nodeProperty in node.properties %}
-                    {{ nodeProperty.name }}: {{ nodeProperty.value }}<br />
+                    {% for propertyValue in nodeProperty.values %}
+                        {{ nodeProperty.name }}: {{ propertyValue.value }}<br/>
+                    {% endfor %}
                 {% endfor %}
                 <a rel="editform" href="{{ path('apiEditNode', {'nodeUuid': node.uuid}) }}">Edit</a>
             </li>

@@ -32,10 +32,25 @@ class PropertyViewModel
 
 
     /**
+     * @return string[]
+     */
+    public function getValues(): array
+    {
+        $result = [];
+
+        foreach ($this->property->getValues() as $propertyValue) {
+            $result[] = (string)$propertyValue->getValue();
+        }
+
+        return $result;
+    }
+
+
+    /**
      * @return string
      */
-    public function getValue(): string
+    public function getFirstValue(): string
     {
-        return (string)$this->property->getValue();
+        return (string)$this->property->getFirstValue()->getValue();
     }
 }
