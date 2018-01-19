@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "39097d34de11c90c9950aa7864bc3525",
+    "content-hash": "07d193805cf0efd552174d68ba6b0e4b",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -440,20 +440,20 @@
         },
         {
             "name": "doctrine/inflector",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/inflector.git",
-                "reference": "e11d84c6e018beedd929cff5220969a3c6d1d462"
+                "reference": "5527a48b7313d15261292c149e55e26eae771b0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/e11d84c6e018beedd929cff5220969a3c6d1d462",
-                "reference": "e11d84c6e018beedd929cff5220969a3c6d1d462",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/5527a48b7313d15261292c149e55e26eae771b0a",
+                "reference": "5527a48b7313d15261292c149e55e26eae771b0a",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.0"
+                "php": "^7.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^6.2"
@@ -461,7 +461,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2.x-dev"
+                    "dev-master": "1.3.x-dev"
                 }
             },
             "autoload": {
@@ -503,7 +503,7 @@
                 "singularize",
                 "string"
             ],
-            "time": "2017-07-22T12:18:28+00:00"
+            "time": "2018-01-09T20:05:19+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -707,16 +707,16 @@
         },
         {
             "name": "graphaware/neo4j-php-client",
-            "version": "4.8.3",
+            "version": "4.8.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/graphaware/neo4j-php-client.git",
-                "reference": "1cd4a41177979506de72edc8c368a24ec6cda33e"
+                "reference": "47b9b97114db8b81bd1c8df50a44f1369ae9748b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/graphaware/neo4j-php-client/zipball/1cd4a41177979506de72edc8c368a24ec6cda33e",
-                "reference": "1cd4a41177979506de72edc8c368a24ec6cda33e",
+                "url": "https://api.github.com/repos/graphaware/neo4j-php-client/zipball/47b9b97114db8b81bd1c8df50a44f1369ae9748b",
+                "reference": "47b9b97114db8b81bd1c8df50a44f1369ae9748b",
                 "shasum": ""
             },
             "require": {
@@ -767,7 +767,7 @@
                 "http",
                 "neo4j"
             ],
-            "time": "2017-11-19T11:30:17+00:00"
+            "time": "2018-01-11T16:48:38+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1995,16 +1995,16 @@
         },
         {
             "name": "sensiolabs/security-checker",
-            "version": "v4.1.6",
+            "version": "v4.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/security-checker.git",
-                "reference": "387b6a3b723ba35588b33d5f8d14e28ed608bd30"
+                "reference": "d539ccba2b4dce515de04f16b7ed7ae5b9eeb434"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/387b6a3b723ba35588b33d5f8d14e28ed608bd30",
-                "reference": "387b6a3b723ba35588b33d5f8d14e28ed608bd30",
+                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/d539ccba2b4dce515de04f16b7ed7ae5b9eeb434",
+                "reference": "d539ccba2b4dce515de04f16b7ed7ae5b9eeb434",
                 "shasum": ""
             },
             "require": {
@@ -2036,7 +2036,7 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
-            "time": "2017-10-29T18:48:08+00:00"
+            "time": "2018-01-11T05:54:03+00:00"
         },
         {
             "name": "symfony/monolog-bundle",
@@ -2443,16 +2443,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.3.14",
+            "version": "v3.3.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "8e2b473de636a65a018b370d5e88778a260f0e33"
+                "reference": "6e2feb700fc20f6ced75d3e8c273b0ecd3dba835"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/8e2b473de636a65a018b370d5e88778a260f0e33",
-                "reference": "8e2b473de636a65a018b370d5e88778a260f0e33",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/6e2feb700fc20f6ced75d3e8c273b0ecd3dba835",
+                "reference": "6e2feb700fc20f6ced75d3e8c273b0ecd3dba835",
                 "shasum": ""
             },
             "require": {
@@ -2593,7 +2593,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2017-12-04T22:26:41+00:00"
+            "time": "2018-01-05T07:28:58+00:00"
         },
         {
             "name": "tistre/graphcards-lib",
@@ -2601,15 +2601,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tistre/GraphCards-lib.git",
-                "reference": "db1b3f4122d05eda4f23df559538107962f37b32"
+                "reference": "7afde2cc39ff81d7ab7a8f2d80464f2a48c3c98c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tistre/GraphCards-lib/zipball/db1b3f4122d05eda4f23df559538107962f37b32",
-                "reference": "db1b3f4122d05eda4f23df559538107962f37b32",
+                "url": "https://api.github.com/repos/tistre/GraphCards-lib/zipball/7afde2cc39ff81d7ab7a8f2d80464f2a48c3c98c",
+                "reference": "7afde2cc39ff81d7ab7a8f2d80464f2a48c3c98c",
                 "shasum": ""
             },
             "require": {
+                "ext-intl": "*",
                 "graphaware/neo4j-php-client": "^4.8",
                 "monolog/monolog": "^1.23",
                 "php": ">=7.1.0"
@@ -2635,20 +2636,20 @@
                 "source": "https://github.com/tistre/GraphCards-lib/tree/master",
                 "issues": "https://github.com/tistre/GraphCards-lib/issues"
             },
-            "time": "2017-12-15T21:37:16+00:00"
+            "time": "2018-01-18T22:02:27+00:00"
         },
         {
             "name": "twbs/bootstrap",
-            "version": "v4.0.0-beta.3",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twbs/bootstrap.git",
-                "reference": "ced70da441d487efb8589acbff445d6b5fa68bb9"
+                "reference": "8a628b943cf31ca0a002c08af661a95772480225"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/ced70da441d487efb8589acbff445d6b5fa68bb9",
-                "reference": "ced70da441d487efb8589acbff445d6b5fa68bb9",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/8a628b943cf31ca0a002c08af661a95772480225",
+                "reference": "8a628b943cf31ca0a002c08af661a95772480225",
                 "shasum": ""
             },
             "replace": {
@@ -2686,7 +2687,7 @@
                 "sass",
                 "web"
             ],
-            "time": "2017-12-28T17:50:04+00:00"
+            "time": "2018-01-18T18:29:48+00:00"
         },
         {
             "name": "twig/twig",
@@ -2812,16 +2813,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v3.4.2",
+            "version": "v3.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "074c2e205c849a5fb37b1c24ade03cc975ac8079"
+                "reference": "24ffb71a115c25f5ee56cbfd38e56ed2cdbeb0a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/074c2e205c849a5fb37b1c24ade03cc975ac8079",
-                "reference": "074c2e205c849a5fb37b1c24ade03cc975ac8079",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/24ffb71a115c25f5ee56cbfd38e56ed2cdbeb0a9",
+                "reference": "24ffb71a115c25f5ee56cbfd38e56ed2cdbeb0a9",
                 "shasum": ""
             },
             "require": {
@@ -2841,6 +2842,10 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "3.4-dev"
+                },
+                "thanks": {
+                    "name": "phpunit/phpunit",
+                    "url": "https://github.com/sebastianbergmann/phpunit"
                 }
             },
             "autoload": {
@@ -2870,14 +2875,13 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2017-12-14T19:40:10+00:00"
+            "time": "2018-01-04T17:19:23+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "tistre/graphcards-lib": 20,
-        "twbs/bootstrap": 10
+        "tistre/graphcards-lib": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
