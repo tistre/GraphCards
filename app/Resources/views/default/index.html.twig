@@ -1,34 +1,15 @@
 {% extends 'default/base.html.twig' %}
 
 {% block body_main %}
-    <div class="container">
-        <h1>List of nodes</h1>
-
-        {{ form(searchForm) }}
-
-        {% for node in nodes %}
-
-            <div class="card" style="width: 18rem;">
-                {% if node.hasProperty('schema:image') %}
-                    <img class="card-img-top" src="{{ node.getProperty('schema:image').firstValue }}"/>
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">
-                        {{ node.getProperty('schema:name').firstValue }}
-                        <small class="text-muted">{{ node.labels|join(', ') }}</small>
-                    </h5>
-                    {% if node.hasProperty('schema:description') %}
-                        <p class="card-text">{{ node.getProperty('schema:description').firstValue }}</p>
-                    {% endif %}
-                </div>
-                <div class="card-body">
-                    <a href="{{ path('apiViewNode', {'nodeUuid': node.uuid}) }}" class="card-link">Details</a>
-                    <a href="{{ path('apiEditNode', {'nodeUuid': node.uuid}) }}" class="card-link">Edit</a>
-                </div>
+    <main>
+        <div class="container">
+            <div class="jumbotron">
+                <h1 class="display-4">Welcome to GraphCards!</h1>
+                <p class="lead">This is a graph database frontend.</p>
+                <p class="lead">
+                    <a class="btn btn-primary btn-lg" href="{{ path('listNodes') }}" role="button">Show cards</a>
+                </p>
             </div>
-
-        {% endfor %}
-
-        <a rel="alternate" href="{{ path('apiAddNode') }}">Add a node</a>
-    </div>
+        </div>
+    </main>
 {% endblock %}

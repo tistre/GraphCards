@@ -1,0 +1,50 @@
+{% extends 'default/base.html.twig' %}
+
+{% block body_main %}
+    <main>
+        <div class="container">
+            <div class="row">
+                <h1>List of nodes</h1>
+                {{ form(searchForm) }}
+            </div>
+            <div class="row">
+                {% for node in nodes %}
+
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            {% if node.hasProperty('schema:image') %}
+                                <img class="card-img-top" src="{{ node.getProperty('schema:image').firstValue }}"/>
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    {{ node.getProperty('schema:name').firstValue }}
+                                    <small class="text-muted">{{ node.labels|join(', ') }}</small>
+                                </h5>
+                                {% if node.hasProperty('schema:description') %}
+                                    <p class="card-text">{{ node.getProperty('schema:description').firstValue }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="card-body">
+                                <a href="{{ path('viewNode', {'nodeUuid': node.uuid}) }}"
+                                   class="card-link">Details</a>
+                                <a href="{{ path('apiEditNode', {'nodeUuid': node.uuid}) }}" class="card-link">Edit</a>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <a class="page-link" href="{{ previousPageUrl }}" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">{{ page }}</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="{{ nextPageUrl }}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </main>
+{% endblock %}

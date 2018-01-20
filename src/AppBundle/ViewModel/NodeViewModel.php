@@ -32,6 +32,21 @@ class NodeViewModel
 
 
     /**
+     * @return PropertyViewModel[]
+     */
+    public function getProperties(): array
+    {
+        $result = [];
+
+        foreach ($this->node->getProperties() as $property) {
+            $result[] = new PropertyViewModel($property);
+        }
+
+        return $result;
+    }
+
+
+    /**
      * @param string $name
      * @return bool
      */

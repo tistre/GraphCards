@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use AppBundle\Service\DbAdapterService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -32,12 +33,18 @@ class NodeSearchFormType extends AbstractType
     }
 
 
+    public function getBlockPrefix()
+    {
+        // We want ?q=term not ?form[q]=term
+        return null;
+    }
+
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->setMethod('GET')
-            ->add
-            (
+            ->add(
                 'label',
                 ChoiceType::class,
                 [
@@ -46,9 +53,12 @@ class NodeSearchFormType extends AbstractType
                     'choices' => $this->getNodeLabelChoices()
                 ]
             )
-            ->add
-            (
-                'x',
+            ->add(
+                'p',
+                HiddenType::class
+            )
+            ->add(
+                's',
                 SubmitType::class,
                 [
                     'label' => 'Search'
