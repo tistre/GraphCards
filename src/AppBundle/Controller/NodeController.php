@@ -51,11 +51,32 @@ class NodeController extends Controller
 
         $tplVars['page'] = $page;
         $tplVars['previousPage'] = max(1, ($page - 1));
-        $tplVars['nextPage'] = $page + 1;
+
+        // Fetch one too much to find out whether more is available,
+        // i.e. whether to enable "next page"
+
+        $tplVars['nextPage'] = $page;
+
+        $query = $dbAdapter->buildNodeQuery(
+            $searchLabel,
+            $skip,
+            ($pageSize + 1)
+        );
+
+        foreach ($dbAdapter->listNodes($query) as $node) {
+            if (count($tplVars['nodes']) === $pageSize) {
+                $tplVars['nextPage'] = $page + 1;
+                break;
+            }
+
+            $tplVars['nodes'][] = new NodeViewModel($node);
+        }
 
         $pageUrlParams = [
-            'label' => $searchFormData->label,
-            's' => ''
+            'node_search_form' => [
+                'label' => $searchFormData->label,
+                's' => ''
+            ]
         ];
 
         $tplVars['previousPageUrl'] = $this->generateUrl(
@@ -67,16 +88,6 @@ class NodeController extends Controller
             'listNodes',
             array_merge($pageUrlParams, ['p' => $tplVars['nextPage']])
         );
-
-        $query = $dbAdapter->buildNodeQuery(
-            $searchLabel,
-            $skip,
-            $pageSize
-        );
-
-        foreach ($dbAdapter->listNodes($query) as $node) {
-            $tplVars['nodes'][] = new NodeViewModel($node);
-        }
 
         return $this->render('default/nodes_list.html.twig', $tplVars);
     }
