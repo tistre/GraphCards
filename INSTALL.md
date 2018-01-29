@@ -17,6 +17,17 @@ $ cd /path/to/GraphCards
 $ composer install
 ```
 
+## Add symbolic links to static files
+
+Later this should happen automatically on `composer install`. For now, please create symbolic links manually (you may have to recreate them after each Composer invocation):
+
+```
+$ cd /path/to/GraphCards/web/bundles
+$ ln -s ../../vendor/twbs/bootstrap/dist bootstrap
+$ ln -s ../../vendor/components/jquery jquery
+$ ln -s ../../vendor/twbs/bootstrap/assets/js/vendor bootstrap_assets_js
+```
+
 ## Configure the Apache Web server
 
 Quick instructions here; see the [Symfony “Configuring a Web Server” docs](https://symfony.com/doc/current/cookbook/configuration/web_server_configuration.html) docs for more info.
