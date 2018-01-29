@@ -11,14 +11,57 @@ class NodeViewModel
     /** @var Node */
     protected $node;
 
+    /** @var array */
+    protected $displayTemplates = [];
+
+    /** @var \Twig_Environment */
+    protected $twig;
 
     /**
      * NodeViewModel constructor.
      * @param Node $node
+     * @param \Twig_Environment $twig
+     * @param mixed $displayTemplates
      */
-    public function __construct(Node $node)
+    public function __construct(Node $node, \Twig_Environment $twig, $displayTemplates)
     {
         $this->node = $node;
+        $this->twig = $twig;
+
+        if (is_array($displayTemplates)) {
+            $this->displayTemplates = $displayTemplates;
+        }
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        if (isset($this->displayTemplates['node_name_by_label']) && is_array($this->displayTemplates['node_name_by_label'])) {
+            foreach ($this->getLabels() as $label) {
+                if (isset($this->displayTemplates['node_name_by_label'][$label])) {
+                    try {
+                        $template = $this->twig->createTemplate($this->displayTemplates['node_name_by_label'][$label]);
+                        return $template->render(['node' => $this]);
+                    } catch (\Throwable $e) {
+                        return '';
+                    }
+                }
+            }
+        }
+
+        if (!empty($this->displayTemplates['node_name_default'])) {
+            try {
+                $template = $this->twig->createTemplate($this->displayTemplates['node_name_default']);
+                return $template->render(['node' => $this]);
+            } catch (\Throwable $e) {
+                return '';
+            }
+        }
+
+        return '';
     }
 
 

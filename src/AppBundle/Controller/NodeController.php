@@ -7,7 +7,11 @@ use AppBundle\Form\NodeFormType;
 use AppBundle\Form\NodeSearchFormData;
 use AppBundle\Form\NodeSearchFormType;
 use AppBundle\Service\DbAdapterService;
+use AppBundle\Service\SearchService;
 use AppBundle\ViewModel\NodeViewModel;
+use AppBundle\ViewModel\RelationshipViewModel;
+use GraphCards\Model\Node;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -24,26 +28,26 @@ class NodeController extends Controller
      */
     public function listNodesAction(Request $request): Response
     {
-        /** @var DbAdapterService $dbAdapterService */
-        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
-        $dbAdapter = $dbAdapterService->getDbAdapter();
-
         $searchFormData = new NodeSearchFormData();
         $searchForm = $this->createForm(NodeSearchFormType::class, $searchFormData);
 
         $searchForm->handleRequest($request);
 
         $searchLabel = '';
+        $searchQuery = '';
 
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
             if ($searchFormData->label !== null) {
                 $searchLabel = $searchFormData->label;
             }
+
+            if ($searchFormData->q !== null) {
+                $searchQuery = $searchFormData->q;
+            }
         }
 
         $page = max(1, $request->query->getInt('p', 1));
         $pageSize = 20;
-        $skip = $pageSize * ($page - 1);
 
         $tplVars = [];
         $tplVars['searchForm'] = $searchForm->createView();
@@ -57,19 +61,18 @@ class NodeController extends Controller
 
         $tplVars['nextPage'] = $page;
 
-        $query = $dbAdapter->buildNodeQuery(
-            $searchLabel,
-            $skip,
-            ($pageSize + 1)
-        );
+        $nodes = $this->searchNodes($searchLabel, $searchQuery, $page, $pageSize, $moreAvailable);
 
-        foreach ($dbAdapter->listNodes($query) as $node) {
-            if (count($tplVars['nodes']) === $pageSize) {
-                $tplVars['nextPage'] = $page + 1;
-                break;
-            }
+        if ($moreAvailable) {
+            $tplVars['nextPage'] = $page + 1;
+        }
 
-            $tplVars['nodes'][] = new NodeViewModel($node);
+        foreach ($nodes as $node) {
+            $tplVars['nodes'][] = new NodeViewModel(
+                $node,
+                $this->get('twig'),
+                $this->getParameter('display_templates')
+            );
         }
 
         $pageUrlParams = [
@@ -107,8 +110,41 @@ class NodeController extends Controller
 
         $tplVars = [];
         $tplVars['nodeUuid'] = $nodeUuid;
-        $tplVars['node'] = new NodeViewModel($dbAdapter->loadNode($nodeUuid));
-        $tplVars['relationships'] = $dbAdapter->listNodeRelationships($nodeUuid);
+
+        $nodeViewModel = new NodeViewModel(
+            $dbAdapter->loadNode($nodeUuid),
+            $this->get('twig'),
+            $this->getParameter('display_templates')
+        );
+
+        $tplVars['node'] = $nodeViewModel;
+
+        $tplVars['nodeRelationships'] = [];
+
+        foreach ($dbAdapter->listNodeRelationships($nodeUuid, true) as $relationship) {
+            $relationshipViewModel = new RelationshipViewModel(
+                $relationship,
+                $this->get('twig'),
+                $this->getParameter('display_templates')
+            );
+
+            if ($relationshipViewModel->getSourceNode()->getUuid() === $nodeViewModel->getUuid()) {
+                $key = 'source';
+            } else {
+                $key = 'target';
+            }
+
+            $type = $relationshipViewModel->getType();
+
+            if (!isset($tplVars['nodeRelationships'][$type])) {
+                $tplVars['nodeRelationships'][$type] = [
+                    'source' => [],
+                    'target' => []
+                ];
+            }
+
+            $tplVars['nodeRelationships'][$type][$key][] = $relationshipViewModel;
+        }
 
         return $this->render('default/node_view.html.twig', $tplVars);
     }
@@ -155,5 +191,69 @@ class NodeController extends Controller
         $tplVars['allPropertyKeys'] = $dbAdapter->listPropertyKeys();
 
         return $this->render('default/node_edit.html.twig', $tplVars);
+    }
+
+
+    /**
+     * @param string $searchLabel
+     * @param string $searchQuery
+     * @param int $page
+     * @param int $pageSize
+     * @param bool $moreAvailable
+     * @return Node[]
+     */
+    protected function searchNodes(string $searchLabel, string $searchQuery, int $page, int $pageSize, &$moreAvailable): array
+    {
+        $moreAvailable = false;
+
+        /** @var LoggerInterface $logger */
+        $logger = $this->get('logger');
+
+        /** @var SearchService $searchService */
+        $searchService = $this->get('AppBundle\Service\SearchService');
+
+        $params = [
+            'index' => 'neo4j-index-node',
+            'size' => $pageSize,
+            'from' => ($pageSize * ($page - 1))
+        ];
+
+        if ($searchLabel !== '') {
+            $params['type'] = $searchLabel;
+        }
+
+        if ($searchQuery !== '') {
+            $params['body'] = [
+                'query' => [
+                    'simple_query_string' => [
+                        'query' => $searchQuery,
+                        'default_operator' => 'and'
+                    ]
+                ]
+            ];
+        }
+
+        try {
+            $client = $searchService->getClient();
+            $response = $client->search($params);
+        } catch (\Exception $exception) {
+            $logger->error('Elasticsearch exception: ' . $exception->getMessage(), $exception->getTrace());
+            return [];
+        }
+
+        // TODO: Fix this hack
+        $moreAvailable = ($response['hits']['total'] > $pageSize);
+
+        /** @var DbAdapterService $dbAdapterService */
+        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
+        $dbAdapter = $dbAdapterService->getDbAdapter();
+
+        $nodes = [];
+
+        foreach ($response['hits']['hits'] as $hit) {
+            $nodes[] = $dbAdapter->loadNode($hit['_id']);
+        }
+
+        return $nodes;
     }
 }

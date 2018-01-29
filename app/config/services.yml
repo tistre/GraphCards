@@ -38,3 +38,8 @@ services:
         arguments:
             $neo4jDefaultConnection: '%neo4j_default_connection%'
             $neo4jBoltConnection: '%neo4j_bolt_connection%'
+
+    AppBundle\Service\SearchService:
+        public: true
+        arguments:
+            $elasticsearchConnection: '%elasticsearch_connection%'

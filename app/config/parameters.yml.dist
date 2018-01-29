@@ -8,3 +8,13 @@ parameters:
     # Neo4j database connection
     neo4j_default_connection: http://neo4j:secret@localhost:7474
     neo4j_bolt_connection: bolt://neo4j:secret@localhost:7687
+
+    # Elasticsearch connection
+    elasticsearch_connection: ""
+
+    display_templates:
+      # Node name template
+      node_name_default: "{{ node.getProperty('name').firstValue }}"
+      # Node name template by label
+      node_name_by_label:
+        label1: "{{ node.getProperty('name').firstValue }}"

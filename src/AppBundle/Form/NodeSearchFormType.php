@@ -6,6 +6,7 @@ use AppBundle\Service\DbAdapterService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -36,6 +37,14 @@ class NodeSearchFormType extends AbstractType
     {
         $builder
             ->setMethod('GET')
+            ->add(
+                'q',
+                TextType::class,
+                [
+                    'label' => 'Query',
+                    'required' => false
+                ]
+            )
             ->add(
                 'label',
                 ChoiceType::class,

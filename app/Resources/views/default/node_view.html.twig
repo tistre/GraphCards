@@ -3,6 +3,7 @@
 {% block body_main %}
     <main>
         <div class="container">
+
             <div class="card">
                 {% if node.hasProperty('schema:image') %}
                     <img class="card-img-top" src="{{ node.getProperty('schema:image').firstValue }}"/>
@@ -12,7 +13,7 @@
                         {{ node.labels|join(', ') }}
                     </div>
                     <h1 class="card-title">
-                        {{ node.getProperty('schema:name').firstValue }}
+                        {{ node.name }}
                     </h1>
                     {% if node.hasProperty('schema:description') %}
                         <p class="card-text">{{ node.getProperty('schema:description').firstValue }}</p>
@@ -28,6 +29,38 @@
                     <a href="{{ path('editNode', {'nodeUuid': node.uuid}) }}" class="card-link">Edit</a>
                 </div>
             </div>
+
+            {% for relationshipType,relationshipsByType in nodeRelationships %}
+                {% for key,relationships in relationshipsByType %}
+                    {% if relationships|length > 0 %}
+                        {% for relationship in relationships %}
+                            <div class="row">
+                                <div class="col">
+                                    {% if key == "target" %}
+                                        <a href="{{ path("viewNode", {'nodeUuid': relationship.sourceNode.uuid}) }}">{{ relationship.sourceNode.name }}</a>
+                                    {% endif %}
+                                </div>
+                                <div class="col">
+                                    {% if key == "target" and loop.first %}-[:{{ relationshipType }}]-&gt;{% endif %}
+                                </div>
+                                <div class="col">
+                                    {% if loop.first %}(this){% endif %}
+                                </div>
+                                <div class="col">
+                                    {% if key == "source" and loop.first %}-[:{{ relationshipType }}]-&gt;{% endif %}
+                                </div>
+                                <div class="col">
+                                    {% if key == "source" %}
+                                        <a
+                                            href="{{ path("viewNode", {'nodeUuid': relationship.targetNode.uuid}) }}">{{ relationship.targetNode.name }}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+
         </div>
     </main>
 {% endblock %}
