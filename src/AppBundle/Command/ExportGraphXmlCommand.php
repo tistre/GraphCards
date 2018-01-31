@@ -55,9 +55,9 @@ class ExportGraphXmlCommand extends Command
             foreach ($row as $columnName => $obj) {
                 if (is_object($obj)) {
                     if ($obj instanceof Node) {
-                        $xmlExporter->exportNode($obj, ['rowNum' => $rowNum, 'columnName' => $columnName]);
+                        $xmlExporter->exportNode($obj, ['rowNumber' => $rowNum, 'columnName' => $columnName]);
                     } elseif ($obj instanceof Relationship) {
-                        $xmlExporter->exportRelationship($obj, ['rowNum' => $rowNum, 'columnName' => $columnName]);
+                        $xmlExporter->exportRelationship($obj, ['rowNumber' => $rowNum, 'columnName' => $columnName]);
                     } else {
                         throw new \RuntimeException(
                             sprintf(
@@ -75,7 +75,7 @@ class ExportGraphXmlCommand extends Command
             if (count($rowData) > 0) {
                 // <row>
                 $xmlExporter->writer->startElement('row');
-                $xmlExporter->writer->writeAttribute('rowNum', $rowNum);
+                $xmlExporter->writer->writeAttribute('rowNumber', $rowNum);
 
                 foreach ($rowData as $columnName => $value) {
                     // <record></record>
