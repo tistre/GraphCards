@@ -49,15 +49,15 @@ class ExportGraphXmlCommand extends Command
         $xmlExporter = new XmlExporter('php://output');
         $xmlExporter->startDocument();
 
-        foreach ($dbAdapter->listResults($dbQuery) as $row) {
+        foreach ($dbAdapter->listResults($dbQuery) as $rowNum => $row) {
             $rowData = [];
 
-            foreach ($row as $key => $obj) {
+            foreach ($row as $columnName => $obj) {
                 if (is_object($obj)) {
                     if ($obj instanceof Node) {
-                        $xmlExporter->exportNode($obj);
+                        $xmlExporter->exportNode($obj, ['rowNum' => $rowNum, 'columnName' => $columnName]);
                     } elseif ($obj instanceof Relationship) {
-                        $xmlExporter->exportRelationship($obj);
+                        $xmlExporter->exportRelationship($obj, ['rowNum' => $rowNum, 'columnName' => $columnName]);
                     } else {
                         throw new \RuntimeException(
                             sprintf(
@@ -68,18 +68,19 @@ class ExportGraphXmlCommand extends Command
                         );
                     }
                 } else {
-                    $rowData[$key] = (string)$obj;
+                    $rowData[$columnName] = (string)$obj;
                 }
             }
 
             if (count($rowData) > 0) {
                 // <row>
                 $xmlExporter->writer->startElement('row');
+                $xmlExporter->writer->writeAttribute('rowNum', $rowNum);
 
-                foreach ($rowData as $key => $value) {
+                foreach ($rowData as $columnName => $value) {
                     // <record></record>
                     $xmlExporter->writer->startElement('record');
-                    $xmlExporter->writer->writeAttribute('key', $key);
+                    $xmlExporter->writer->writeAttribute('columnName', $columnName);
                     $xmlExporter->writer->text($value);
                     $xmlExporter->writer->endElement();
                 }
