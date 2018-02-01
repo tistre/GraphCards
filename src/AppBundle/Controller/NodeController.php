@@ -8,6 +8,7 @@ use AppBundle\Form\NodeSearchFormData;
 use AppBundle\Form\NodeSearchFormType;
 use AppBundle\Service\DbAdapterService;
 use AppBundle\Service\SearchService;
+use AppBundle\Utils\NodeSearchResult;
 use AppBundle\ViewModel\NodeViewModel;
 use AppBundle\ViewModel\RelationshipViewModel;
 use GraphCards\Model\Node;
@@ -61,13 +62,13 @@ class NodeController extends Controller
 
         $tplVars['nextPage'] = $page;
 
-        $nodes = $this->searchNodes($searchLabel, $searchQuery, $page, $pageSize, $moreAvailable);
+        $nodeSearchResult = $this->searchNodes($searchLabel, $searchQuery, $page, $pageSize);
 
-        if ($moreAvailable) {
+        if ($nodeSearchResult->hasNextPage()) {
             $tplVars['nextPage'] = $page + 1;
         }
 
-        foreach ($nodes as $node) {
+        foreach ($nodeSearchResult->getNodes() as $node) {
             $tplVars['nodes'][] = new NodeViewModel(
                 $node,
                 $this->get('twig'),
@@ -199,10 +200,9 @@ class NodeController extends Controller
      * @param string $searchQuery
      * @param int $page
      * @param int $pageSize
-     * @param bool $moreAvailable
-     * @return Node[]
+     * @return NodeSearchResult
      */
-    protected function searchNodes(string $searchLabel, string $searchQuery, int $page, int $pageSize, &$moreAvailable): array
+    protected function searchNodes(string $searchLabel, string $searchQuery, int $page, int $pageSize): NodeSearchResult
     {
         $moreAvailable = false;
 
@@ -212,10 +212,12 @@ class NodeController extends Controller
         /** @var SearchService $searchService */
         $searchService = $this->get('AppBundle\Service\SearchService');
 
+        $offset = ($pageSize * ($page - 1));
+
         $params = [
             'index' => 'neo4j-index-node',
             'size' => $pageSize,
-            'from' => ($pageSize * ($page - 1))
+            'from' => $offset
         ];
 
         if ($searchLabel !== '') {
@@ -241,9 +243,6 @@ class NodeController extends Controller
             return [];
         }
 
-        // TODO: Fix this hack
-        $moreAvailable = ($response['hits']['total'] > $pageSize);
-
         /** @var DbAdapterService $dbAdapterService */
         $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
         $dbAdapter = $dbAdapterService->getDbAdapter();
@@ -254,6 +253,9 @@ class NodeController extends Controller
             $nodes[] = $dbAdapter->loadNode($hit['_id']);
         }
 
-        return $nodes;
+        return (new NodeSearchResult())
+            ->setNodes($nodes)
+            ->setOffset($offset)
+            ->setTotalHits($response['hits']['total']);
     }
 }
