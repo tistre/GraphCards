@@ -12,7 +12,7 @@
             {% endif %}
             <div class="card-body">
                 <h1 class="card-title">
-                    {{ node.getProperty('schema:name').value }}
+                    {{ node.name }}
                     <small class="text-muted">{{ node.labels|join(', ') }}</small>
                 </h1>
             </div>

@@ -165,8 +165,14 @@ class NodeController extends Controller
         $dataSource = new DataSource($dbAdapter);
 
         $tplVars = [];
-        $tplVars['node'] = $dbAdapter->loadNode($nodeUuid);
-        $tplVars['nodeUuid'] = $nodeUuid;
+
+        $nodeViewModel = new NodeViewModel(
+            $dbAdapter->loadNode($nodeUuid),
+            $this->get('twig'),
+            $this->getParameter('display_templates')
+        );
+
+        $tplVars['node'] = $nodeViewModel;
 
         $formData = $dataSource->getEditNodeFormData($nodeUuid);
 
