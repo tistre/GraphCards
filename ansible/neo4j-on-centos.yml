@@ -1,0 +1,111 @@
+# Install Elasticsearch and Neo4j on CentOS (tested on CentOS 7.4)
+# see: https://neo4j.com/docs/operations-manual/current/installation/linux/rpm/
+---
+- hosts: localhost
+  become: yes
+  tasks:
+  - name: "Install Java"
+    yum:
+      name: java-1.8.0-openjdk
+      state: present
+  - name: "Import Elasticsearch GPG key"
+    rpm_key:
+      key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+      state: present
+  - name: "Add Elasticsearch RPM repository"
+    yum_repository:
+      name: elasticsearch
+      description: "Elasticsearch repository for 6.x packages"
+      baseurl: https://artifacts.elastic.co/packages/6.x/yum
+      gpgcheck: yes
+      gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+      enabled: yes
+  - name: "Install Elasticsearch"
+    yum:
+      name: elasticsearch
+      state: present
+  - name: "Start Elasticsearch at system boot"
+    service:
+      name: elasticsearch
+      enabled: yes
+      state: started
+  - name: "Import Neo4j GPG key"
+    rpm_key:
+      key: https://debian.neo4j.org/neotechnology.gpg.key
+      state: present
+  - name: "Add Neo4j RPM repository"
+    yum_repository:
+      name: neo4j
+      description: "Neo4j RPM Repository"
+      baseurl: http://yum.neo4j.org/stable
+      enabled: yes
+      gpgcheck: yes
+  - name: "Install Neo4j"
+    yum:
+      name: neo4j-3.3.1
+      state: present
+  - name: "Add GraphAware Framework Neo4j plugin"
+    get_url:
+      url: https://products.graphaware.com/download/framework-server-community/latest
+      dest: /var/lib/neo4j/plugins/graphaware-server-community-all.jar
+      owner: neo4j
+      group: neo4j
+  - name: "Configure GraphAware Framework Neo4j plugin"
+    blockinfile:
+      path: /etc/neo4j/neo4j.conf
+      marker: "# {mark} Ansible managed: GraphAware Framework Neo4j plugin"
+      block: |
+        dbms.unmanaged_extension_classes=com.graphaware.server=/graphaware
+        com.graphaware.runtime.enabled=true
+  - name: "Add GraphAware UUID Neo4j plugin"
+    get_url:
+      url: https://products.graphaware.com/download/uuid/latest
+      dest: /var/lib/neo4j/plugins/graphaware-uuid.jar
+      owner: neo4j
+      group: neo4j
+  - name: "Configure GraphAware UUID Neo4j plugin"
+    blockinfile:
+      path: /etc/neo4j/neo4j.conf
+      marker: "# {mark} Ansible managed: GraphAware UUID Neo4j plugin"
+      block: |
+        # Module ID:
+        com.graphaware.module.UIDM.1=com.graphaware.module.uuid.UuidBootstrapper
+        # Optional, default is "uuid":
+        com.graphaware.module.UIDM.uuidProperty=uuid
+        # Assign a UUID to all relationships:
+        com.graphaware.module.UIDM.relationship=com.graphaware.runtime.policy.all.IncludeAllBusinessRelationships
+  - name: "Add GraphAware Elasticsearch Integration Neo4j plugin"
+    get_url:
+      url: https://products.graphaware.com/download/neo4j-to-elasticsearch/latest
+      dest: /var/lib/neo4j/plugins/graphaware-neo4j-to-elasticsearch.jar
+      owner: neo4j
+      group: neo4j
+  - name: "Configure GraphAware Elasticsearch Integration Neo4j plugin"
+    blockinfile:
+      path: /etc/neo4j/neo4j.conf
+      marker: "# {mark} Ansible managed: GraphAware Elasticsearch Integration Neo4j plugin"
+      block: |
+        # Module ID:
+        com.graphaware.module.ES.2=com.graphaware.module.es.ElasticSearchModuleBootstrapper
+        # URI of Elasticsearch:
+        com.graphaware.module.ES.uri=localhost
+        # Port of Elasticsearch
+        com.graphaware.module.ES.port=9200
+        # Elasticsearch index name, default is neo4j-index:
+        com.graphaware.module.ES.index=neo4j-index
+        # Node property key of a propery that is used as unique identifier of the node, defaults to uuid:
+        com.graphaware.module.ES.keyProperty=uuid
+        # optional, read explanation below, defaults to 0
+        com.graphaware.module.ES.initializeUntil={{ ansible_date_time.epoch }}000
+  - name: "Start Neo4j at system boot"
+    service:
+      name: neo4j
+      enabled: yes
+  - name: "Allow non-local Neo4j connections"
+    lineinfile:
+      dest: /etc/neo4j/neo4j.conf
+      line: "dbms.connectors.default_listen_address=0.0.0.0"
+  - name: "Restart Neo4j to enable non-local connections"
+    service:
+      name: neo4j
+      state: restarted
