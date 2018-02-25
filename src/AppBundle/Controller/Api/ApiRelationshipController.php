@@ -14,6 +14,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApiRelationshipController extends Controller
 {
+    /** @var DbAdapterService */
+    protected $dbAdapterService;
+
+
+    /**
+     * ApiRelationshipController constructor.
+     * @param DbAdapterService $dbAdapterService
+     */
+    public function __construct(DbAdapterService $dbAdapterService)
+    {
+        $this->dbAdapterService = $dbAdapterService;
+    }
+
+
     /**
      * @Route("/api/relationships/list", name="apiListRelationships")
      * @param Request $request
@@ -21,9 +35,7 @@ class ApiRelationshipController extends Controller
      */
     public function listRelationshipsAction(Request $request)
     {
-        /** @var DbAdapterService $dbAdapterService */
-        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
-        $dbAdapter = $dbAdapterService->getDbAdapter();
+        $dbAdapter = $this->dbAdapterService->getDbAdapter();
 
         $response = new Response();
 
@@ -43,9 +55,7 @@ class ApiRelationshipController extends Controller
      */
     public function addRelationshipAction(Request $request)
     {
-        /** @var DbAdapterService $dbAdapterService */
-        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
-        $dbAdapter = $dbAdapterService->getDbAdapter();
+        $dbAdapter = $this->dbAdapterService->getDbAdapter();
         $dataSource = new DataSource($dbAdapter);
 
         $response = new Response();
@@ -94,9 +104,7 @@ class ApiRelationshipController extends Controller
      */
     public function editRelationshipAction(Request $request, string $relationshipUuid)
     {
-        /** @var DbAdapterService $dbAdapterService */
-        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
-        $dbAdapter = $dbAdapterService->getDbAdapter();
+        $dbAdapter = $this->dbAdapterService->getDbAdapter();
         $dataSource = new DataSource($dbAdapter);
 
         $response = new Response();
@@ -140,9 +148,7 @@ class ApiRelationshipController extends Controller
      */
     public function viewRelationshipAction(Request $request, string $relationshipUuid)
     {
-        /** @var DbAdapterService $dbAdapterService */
-        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
-        $dbAdapter = $dbAdapterService->getDbAdapter();
+        $dbAdapter = $this->dbAdapterService->getDbAdapter();
 
         $response = new Response();
 

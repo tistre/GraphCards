@@ -22,6 +22,39 @@ use Symfony\Component\HttpFoundation\Response;
 
 class NodeController extends Controller
 {
+    /** @var LoggerInterface */
+    protected $logger;
+
+    /** @var \Twig_Environment */
+    protected $twig_Environment;
+
+    /** @var DbAdapterService */
+    protected $dbAdapterService;
+
+    /** @var SearchService */
+    protected $searchService;
+
+
+    /**
+     * NodeController constructor.
+     * @param LoggerInterface $logger
+     * @param \Twig_Environment $twig_Environment
+     * @param DbAdapterService $dbAdapterService
+     * @param SearchService $searchService
+     */
+    public function __construct(
+        LoggerInterface $logger,
+        \Twig_Environment $twig_Environment,
+        DbAdapterService $dbAdapterService,
+        SearchService $searchService
+    ) {
+        $this->logger = $logger;
+        $this->twig_Environment = $twig_Environment;
+        $this->dbAdapterService = $dbAdapterService;
+        $this->searchService = $searchService;
+    }
+
+
     /**
      * @Route("/nodes/list", name="listNodes")
      * @param Request $request
@@ -71,7 +104,7 @@ class NodeController extends Controller
         foreach ($nodeSearchResult->getNodes() as $node) {
             $tplVars['nodes'][] = new NodeViewModel(
                 $node,
-                $this->get('twig'),
+                $this->twig_Environment,
                 $this->getParameter('display_templates')
             );
         }
@@ -105,16 +138,14 @@ class NodeController extends Controller
      */
     public function viewNodeAction(Request $request, string $nodeUuid): Response
     {
-        /** @var DbAdapterService $dbAdapterService */
-        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
-        $dbAdapter = $dbAdapterService->getDbAdapter();
+        $dbAdapter = $this->dbAdapterService->getDbAdapter();
 
         $tplVars = [];
         $tplVars['nodeUuid'] = $nodeUuid;
 
         $nodeViewModel = new NodeViewModel(
             $dbAdapter->loadNode($nodeUuid),
-            $this->get('twig'),
+            $this->twig_Environment,
             $this->getParameter('display_templates')
         );
 
@@ -125,7 +156,7 @@ class NodeController extends Controller
         foreach ($dbAdapter->listNodeRelationships($nodeUuid, true) as $relationship) {
             $relationshipViewModel = new RelationshipViewModel(
                 $relationship,
-                $this->get('twig'),
+                $this->twig_Environment,
                 $this->getParameter('display_templates')
             );
 
@@ -159,16 +190,14 @@ class NodeController extends Controller
      */
     public function editNodeAction(Request $request, string $nodeUuid): Response
     {
-        /** @var DbAdapterService $dbAdapterService */
-        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
-        $dbAdapter = $dbAdapterService->getDbAdapter();
+        $dbAdapter = $this->dbAdapterService->getDbAdapter();
         $dataSource = new DataSource($dbAdapter);
 
         $tplVars = [];
 
         $nodeViewModel = new NodeViewModel(
             $dbAdapter->loadNode($nodeUuid),
-            $this->get('twig'),
+            $this->twig_Environment,
             $this->getParameter('display_templates')
         );
 
@@ -210,14 +239,6 @@ class NodeController extends Controller
      */
     protected function searchNodes(string $searchLabel, string $searchQuery, int $page, int $pageSize): NodeSearchResult
     {
-        $moreAvailable = false;
-
-        /** @var LoggerInterface $logger */
-        $logger = $this->get('logger');
-
-        /** @var SearchService $searchService */
-        $searchService = $this->get('AppBundle\Service\SearchService');
-
         $offset = ($pageSize * ($page - 1));
 
         $params = [
@@ -242,16 +263,14 @@ class NodeController extends Controller
         }
 
         try {
-            $client = $searchService->getClient();
+            $client = $this->searchService->getClient();
             $response = $client->search($params);
         } catch (\Exception $exception) {
-            $logger->error('Elasticsearch exception: ' . $exception->getMessage(), $exception->getTrace());
-            return [];
+            $this->logger->error('Elasticsearch exception: ' . $exception->getMessage(), $exception->getTrace());
+            return new NodeSearchResult();
         }
 
-        /** @var DbAdapterService $dbAdapterService */
-        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
-        $dbAdapter = $dbAdapterService->getDbAdapter();
+        $dbAdapter = $this->dbAdapterService->getDbAdapter();
 
         $nodes = [];
 

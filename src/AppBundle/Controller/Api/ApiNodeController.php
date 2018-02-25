@@ -16,6 +16,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApiNodeController extends Controller
 {
+    /** @var DbAdapterService */
+    protected $dbAdapterService;
+
+
+    /**
+     * ApiNodeController constructor.
+     * @param DbAdapterService $dbAdapterService
+     */
+    public function __construct(DbAdapterService $dbAdapterService)
+    {
+        $this->dbAdapterService = $dbAdapterService;
+    }
+
+
     /**
      * @Route("/api/nodes/list", name="apiListNodes")
      * @param Request $request
@@ -23,9 +37,7 @@ class ApiNodeController extends Controller
      */
     public function listNodesAction(Request $request): Response
     {
-        /** @var DbAdapterService $dbAdapterService */
-        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
-        $dbAdapter = $dbAdapterService->getDbAdapter();
+        $dbAdapter = $this->dbAdapterService->getDbAdapter();
 
         $response = new Response();
 
@@ -60,9 +72,7 @@ class ApiNodeController extends Controller
      */
     public function addNodeAction(Request $request): Response
     {
-        /** @var DbAdapterService $dbAdapterService */
-        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
-        $dbAdapter = $dbAdapterService->getDbAdapter();
+        $dbAdapter = $this->dbAdapterService->getDbAdapter();
         $dataSource = new DataSource($dbAdapter);
 
         $response = new Response();
@@ -111,9 +121,7 @@ class ApiNodeController extends Controller
      */
     public function editNodeAction(Request $request, string $nodeUuid): Response
     {
-        /** @var DbAdapterService $dbAdapterService */
-        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
-        $dbAdapter = $dbAdapterService->getDbAdapter();
+        $dbAdapter = $this->dbAdapterService->getDbAdapter();
         $dataSource = new DataSource($dbAdapter);
 
         $response = new Response();
@@ -157,9 +165,7 @@ class ApiNodeController extends Controller
      */
     public function viewNodeAction(Request $request, string $nodeUuid): Response
     {
-        /** @var DbAdapterService $dbAdapterService */
-        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
-        $dbAdapter = $dbAdapterService->getDbAdapter();
+        $dbAdapter = $this->dbAdapterService->getDbAdapter();
 
         $response = new Response();
 

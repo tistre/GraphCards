@@ -11,6 +11,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ApiSchemaController extends Controller
 {
+    /** @var DbAdapterService */
+    protected $dbAdapterService;
+
+
+    /**
+     * ApiSchemaController constructor.
+     * @param DbAdapterService $dbAdapterService
+     */
+    public function __construct(DbAdapterService $dbAdapterService)
+    {
+        $this->dbAdapterService = $dbAdapterService;
+    }
+
+
     /**
      * @Route("/api/schema/nodeLabels/list", name="apiListNodeLabels")
      * @param Request $request
@@ -18,9 +32,7 @@ class ApiSchemaController extends Controller
      */
     public function listNodeLabelsAction(Request $request): Response
     {
-        /** @var DbAdapterService $dbAdapterService */
-        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
-        $dbAdapter = $dbAdapterService->getDbAdapter();
+        $dbAdapter = $this->dbAdapterService->getDbAdapter();
 
         $response = new Response();
 
@@ -40,9 +52,7 @@ class ApiSchemaController extends Controller
      */
     public function listRelationshipTypesAction(Request $request): Response
     {
-        /** @var DbAdapterService $dbAdapterService */
-        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
-        $dbAdapter = $dbAdapterService->getDbAdapter();
+        $dbAdapter = $this->dbAdapterService->getDbAdapter();
 
         $response = new Response();
 
@@ -62,9 +72,7 @@ class ApiSchemaController extends Controller
      */
     public function listPropertyKeysAction(Request $request): Response
     {
-        /** @var DbAdapterService $dbAdapterService */
-        $dbAdapterService = $this->get('AppBundle\Service\DbAdapterService');
-        $dbAdapter = $dbAdapterService->getDbAdapter();
+        $dbAdapter = $this->dbAdapterService->getDbAdapter();
 
         $response = new Response();
 
