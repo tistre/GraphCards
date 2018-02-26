@@ -2,6 +2,7 @@
 
 namespace AppBundle\Security;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -10,6 +11,20 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class SessionUserProvider implements UserProviderInterface
 {
+    /** @var LoggerInterface */
+    protected $logger;
+
+
+    /**
+     * SessionUserProvider constructor.
+     * @param LoggerInterface $logger
+     */
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
+
     /**
      * Loads the user for the given username.
      *
@@ -24,7 +39,7 @@ class SessionUserProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        // TODO: Implement loadUserByUsername() method.
+        // TODO: What for should we implement the loadUserByUsername() method?
         return new User();
     }
 
@@ -47,7 +62,10 @@ class SessionUserProvider implements UserProviderInterface
             throw new UnsupportedUserException('Instances of "%s" are not supported.', get_class($user));
         }
 
-        return $this->loadUserByUsername($user->getUsername());
+        $newUser = new User();
+        $newUser->setOAuthInfo($user->getOAuthInfo());
+
+        return $newUser;
     }
 
 

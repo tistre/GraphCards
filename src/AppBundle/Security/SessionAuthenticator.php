@@ -2,6 +2,7 @@
 
 namespace AppBundle\Security;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,16 @@ use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 
 class SessionAuthenticator implements AuthenticatorInterface
 {
+    /** @var LoggerInterface */
+    protected $logger;
+
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
+
     /**
      * Does the authenticator support the given Request?
      *
@@ -56,7 +67,13 @@ class SessionAuthenticator implements AuthenticatorInterface
      */
     public function getCredentials(Request $request)
     {
-        return 'TODO';
+        $credentials = $request->getSession()->get('oauth_info');
+
+        if (!is_array($credentials)) {
+            $credentials = ['authenticated' => false];
+        }
+
+        return $credentials;
     }
 
 
@@ -77,7 +94,14 @@ class SessionAuthenticator implements AuthenticatorInterface
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        return new User();
+        if (!is_array($credentials)) {
+            $credentials = [];
+        }
+
+        $user = new User();
+        $user->setOAuthInfo($credentials);
+
+        return $user;
     }
 
 
@@ -99,6 +123,10 @@ class SessionAuthenticator implements AuthenticatorInterface
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
+        if (!(is_array($credentials) && $credentials['authenticated'])) {
+            throw new AuthenticationException();
+        }
+
         return true;
     }
 

@@ -8,7 +8,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface
 {
     /** @var string */
-    protected $username = 'hardcoded_username';
+    protected $username = 'anonymous';
+
+    /** @var array */
+    protected $oAuthInfo = [];
 
 
     /**
@@ -79,5 +82,27 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
+    }
+
+
+    /**
+     * @param array $oAuthInfo
+     */
+    public function setOAuthInfo(array $oAuthInfo)
+    {
+        $this->oAuthInfo = $oAuthInfo;
+
+        if (!empty($oAuthInfo['mail'])) {
+            $this->username = $oAuthInfo['mail'];
+        }
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getOAuthInfo()
+    {
+        return $this->oAuthInfo;
     }
 }
