@@ -13,8 +13,12 @@ parameters:
     elasticsearch_connection: ""
 
     display_templates:
-      # Node name template
-      node_name_default: "{{ node.getProperty('name').firstValue }}"
-      # Node name template by label
-      node_name_by_label:
-        label1: "{{ node.getProperty('name').firstValue }}"
+        # Node name template
+        node_name_default: "{{ node.getProperty('name').firstValue }}"
+        # Node name template by label
+        node_name_by_label:
+            label1: "{{ node.getProperty('name').firstValue }}"
+
+    oauth_configs: ~
+    oauth_fake:
+        email: "dummy@example.com"

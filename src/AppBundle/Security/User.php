@@ -3,15 +3,24 @@
 namespace AppBundle\Security;
 
 use Symfony\Component\Security\Core\User\UserInterface;
+use Tistre\SimpleOAuthLogin\OAuthInfo;
 
 
 class User implements UserInterface
 {
-    /** @var string */
-    protected $username = 'anonymous';
+    const DEFAULT_USERNAME = 'anonymous';
 
-    /** @var array */
-    protected $oAuthInfo = [];
+    /** @var OAuthInfo */
+    protected $oAuthInfo;
+
+
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $this->oAuthInfo = new OAuthInfo([]);
+    }
 
 
     /**
@@ -68,9 +77,13 @@ class User implements UserInterface
      *
      * @return string The username
      */
-    public function getUsername()
+    public function getUsername(): string
     {
-        return $this->username;
+        if (strlen($this->oAuthInfo->getMail()) > 0) {
+            return $this->oAuthInfo->getMail();
+        }
+
+        return self::DEFAULT_USERNAME;
     }
 
 
@@ -86,22 +99,18 @@ class User implements UserInterface
 
 
     /**
-     * @param array $oAuthInfo
+     * @param OAuthInfo $oAuthInfo
      */
-    public function setOAuthInfo(array $oAuthInfo)
+    public function setOAuthInfo(OAuthInfo $oAuthInfo)
     {
         $this->oAuthInfo = $oAuthInfo;
-
-        if (!empty($oAuthInfo['mail'])) {
-            $this->username = $oAuthInfo['mail'];
-        }
     }
 
 
     /**
-     * @return array
+     * @return OAuthInfo
      */
-    public function getOAuthInfo()
+    public function getOAuthInfo(): OAuthInfo
     {
         return $this->oAuthInfo;
     }

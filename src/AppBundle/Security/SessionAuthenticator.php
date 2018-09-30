@@ -13,6 +13,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AuthenticatorInterface;
 use Symfony\Component\Security\Guard\Token\GuardTokenInterface;
 use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
+use Tistre\SimpleOAuthLogin\OAuthInfo;
 
 
 class SessionAuthenticator implements AuthenticatorInterface
@@ -67,13 +68,7 @@ class SessionAuthenticator implements AuthenticatorInterface
      */
     public function getCredentials(Request $request)
     {
-        $credentials = $request->getSession()->get('oauth_info');
-
-        if (!is_array($credentials)) {
-            $credentials = ['authenticated' => false];
-        }
-
-        return $credentials;
+        return new OAuthInfo($request->getSession()->get('oauth_info'));
     }
 
 
@@ -94,8 +89,8 @@ class SessionAuthenticator implements AuthenticatorInterface
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        if (!is_array($credentials)) {
-            $credentials = [];
+        if (!(is_object($credentials) && ($credentials instanceof OAuthInfo))) {
+            $credentials = new OAuthInfo([]);
         }
 
         $user = new User();
@@ -123,7 +118,11 @@ class SessionAuthenticator implements AuthenticatorInterface
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-        if (!(is_array($credentials) && $credentials['authenticated'])) {
+        if (!(is_object($credentials) && ($credentials instanceof OAuthInfo))) {
+            $credentials = new OAuthInfo([]);
+        }
+
+        if (!$credentials->isAuthenticated()) {
             throw new AuthenticationException();
         }
 
